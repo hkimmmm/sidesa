@@ -242,4 +242,67 @@ class Pengaduan_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
+
+	public function get_terbaru($limit = 2)
+	{
+		$this->db->select("
+        id,
+        user_id,
+        kode_pengaduan,
+        jenis_pengaduan,
+        tanggal_pengaduan AS created_at, -- Alias untuk menyamakan nama kolom
+        'pengaduan' AS tipe
+    ");
+		$this->db->from('pengaduan');
+		$this->db->order_by('tanggal_pengaduan', 'DESC');
+		$this->db->limit($limit);
+		return $this->db->get()->result(); // Mengembalikan array of stdClass
+	}
+
+	public function get_prioritas($limit = 3)
+	{
+		// Tentukan prioritas berdasarkan status
+		$this->db->select("
+        id,
+        user_id,
+        kode_pengaduan AS judul,
+        jenis_pengaduan AS deskripsi,
+        tanggal_pengaduan AS created_at,
+        'pengaduan' AS tipe,
+        status
+    ");
+		$this->db->from('pengaduan');
+
+		// Urutkan berdasarkan prioritas status (proses > diterima > lainnya)
+		$this->db->order_by('FIELD(status, "proses", "diterima", "selesai", "ditolak") DESC');
+		$this->db->order_by('tanggal_pengaduan', 'DESC'); // Urutkan berdasarkan tanggal jika status sama
+
+		// Batasi jumlah data
+		$this->db->limit($limit);
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function get_statistik($tahun)
+	{
+		$this->db->select("status, COUNT(*) as jumlah");
+		$this->db->from('pengaduan');
+		$this->db->where("YEAR(tanggal_pengaduan)", $tahun);
+		$this->db->group_by("status");
+		$result = $this->db->get()->result_array();
+
+		// Format data untuk grafik
+		$labels = [];
+		$data = [];
+		foreach ($result as $row) {
+			$labels[] = $row['status'] ?: 'Tidak Ditentukan';
+			$data[] = (int) $row['jumlah'];
+		}
+
+		return [
+			'labels' => $labels,
+			'data' => $data
+		];
+	}
 }

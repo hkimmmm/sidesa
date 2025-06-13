@@ -84,83 +84,68 @@
 
 	<!-- Charts and Priority Section -->
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-		<!-- Alokasi Anggaran -->
 		<div class="bg-white p-6 rounded-lg shadow lg:col-span-2">
 			<div class="flex items-center justify-between mb-4">
-				<h2 class="text-lg font-semibold text-gray-800">Alokasi Anggaran Desa</h2>
-				<select
+				<h2 class="text-lg font-semibold text-gray-800">Statistik Pengajuan dan Pengaduan</h2>
+				<select id="tahun-select"
 					class="text-sm border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-					<option>Tahun 2023</option>
-					<option selected>Tahun 2024</option>
+					<option value="2024">Tahun 2024</option>
+					<option value="2025" selected>Tahun 2025</option>
 				</select>
 			</div>
-			<div class="h-64 bg-gray-50 rounded flex items-center justify-center text-gray-400">
-				[Grafik Alokasi Anggaran]
-			</div>
+			<canvas id="statistikChart" class="w-full" style="max-height: 300px;"></canvas>
 		</div>
+
 
 		<!-- Pengaduan Prioritas -->
 		<div class="bg-white p-6 rounded-lg shadow">
 			<h2 class="text-lg font-semibold text-gray-800 mb-4">Pengaduan Prioritas</h2>
 			<div class="space-y-4">
-				<div class="flex items-start border-l-4 border-red-500 pl-3">
-					<div class="flex-shrink-0 mt-1">
-						<div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
-							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-								<path fill-rule="evenodd"
-									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-									clip-rule="evenodd"></path>
-							</svg>
-						</div>
-					</div>
-					<div class="ml-3">
-						<p class="text-sm font-medium text-gray-900">Jalan Rusak</p>
-						<p class="text-sm text-gray-500">RT 05 - Jalan utama berlubang besar</p>
-						<p class="text-xs text-gray-400 mt-1">1 hari lalu</p>
-						<a href="#" class="text-xs text-red-600 hover:text-red-800 mt-1 inline-block">Tinjau
-							Sekarang</a>
-					</div>
-				</div>
+				<?php if (!empty($pengaduan_prioritas)): ?>
+					<?php foreach ($pengaduan_prioritas as $item): ?>
+						<?php
+						// Tentukan warna berdasarkan status atau waktu relatif (misalnya, status 'proses' = merah, 'diterima' = oranye, lainnya = kuning)
+						$border_color = 'border-yellow-500';
+						$bg_color = 'bg-yellow-100';
+						$text_color = 'text-yellow-600';
+						$hover_color = 'hover:text-yellow-800';
 
-				<div class="flex items-start border-l-4 border-orange-500 pl-3">
-					<div class="flex-shrink-0 mt-1">
-						<div
-							class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
-							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-								<path fill-rule="evenodd"
-									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-									clip-rule="evenodd"></path>
-							</svg>
+						if ($item->status === 'proses') {
+							$border_color = 'border-red-500';
+							$bg_color = 'bg-red-100';
+							$text_color = 'text-red-600';
+							$hover_color = 'hover:text-red-800';
+						} elseif ($item->status === 'diterima') {
+							$border_color = 'border-orange-500';
+							$bg_color = 'bg-orange-100';
+							$text_color = 'text-orange-600';
+							$hover_color = 'hover:text-orange-800';
+						}
+						?>
+						<div class="flex items-start border-l-4 <?php echo $border_color; ?> pl-3">
+							<div class="flex-shrink-0 mt-1">
+								<div
+									class="h-8 w-8 rounded-full <?php echo $bg_color; ?> flex items-center justify-center <?php echo $text_color; ?>">
+									<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd"
+											d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+											clip-rule="evenodd"></path>
+									</svg>
+								</div>
+							</div>
+							<div class="ml-3">
+								<p class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($item->judul); ?></p>
+								<p class="text-sm text-gray-500"><?php echo htmlspecialchars($item->deskripsi); ?></p>
+								<p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($item->waktu_relatif); ?></p>
+								<a href="<?php echo site_url('kepala/pengaduan/' . $item->id); ?>"
+									class="text-xs <?php echo $text_color . ' ' . $hover_color; ?> mt-1 inline-block">Tinjau
+									Sekarang</a>
+							</div>
 						</div>
-					</div>
-					<div class="ml-3">
-						<p class="text-sm font-medium text-gray-900">Drainase Tersumbat</p>
-						<p class="text-sm text-gray-500">RT 02 - Genangan air saat hujan</p>
-						<p class="text-xs text-gray-400 mt-1">2 hari lalu</p>
-						<a href="#" class="text-xs text-orange-600 hover:text-orange-800 mt-1 inline-block">Tinjau
-							Sekarang</a>
-					</div>
-				</div>
-
-				<div class="flex items-start border-l-4 border-yellow-500 pl-3">
-					<div class="flex-shrink-0 mt-1">
-						<div
-							class="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
-							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-								<path fill-rule="evenodd"
-									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-									clip-rule="evenodd"></path>
-							</svg>
-						</div>
-					</div>
-					<div class="ml-3">
-						<p class="text-sm font-medium text-gray-900">Fasilitumum Rusak</p>
-						<p class="text-sm text-gray-500">Poskamling RT 03 perlu perbaikan</p>
-						<p class="text-xs text-gray-400 mt-1">3 hari lalu</p>
-						<a href="#" class="text-xs text-yellow-600 hover:text-yellow-800 mt-1 inline-block">Tinjau
-							Sekarang</a>
-					</div>
-				</div>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<p class="text-sm text-gray-500">Belum ada pengaduan prioritas.</p>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -251,3 +236,100 @@
 		<?php endif; ?>
 	</div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const ctx = document.getElementById('statistikChart').getContext('2d');
+		let chart;
+
+		function renderChart(labels, pengajuanData, pengaduanData) {
+			if (chart) chart.destroy(); // Hancurkan grafik lama jika ada
+
+			const data = {
+				labels: labels,
+				datasets: [
+					{
+						label: 'Pengajuan',
+						data: pengajuanData,
+						backgroundColor: 'rgba(59, 130, 246, 0.2)',
+						borderColor: 'rgba(59, 130, 246, 1)',
+						borderWidth: 2,
+						fill: true, // Mengisi area di bawah garis
+						tension: 0.4 // Membuat garis sedikit melengkung
+					},
+					{
+						label: 'Pengaduan',
+						data: pengaduanData,
+						backgroundColor: 'rgba(234, 88, 12, 0.2)',
+						borderColor: 'rgba(234, 88, 12, 1)',
+						borderWidth: 2,
+						fill: true, // Mengisi area di bawah garis
+						tension: 0.4 // Membuat garis sedikit melengkung
+					}
+				]
+			};
+
+			const config = {
+				type: 'line', // Ubah dari 'bar' ke 'line'
+				data: data,
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						y: {
+							beginAtZero: true,
+							title: {
+								display: true,
+								text: 'Jumlah'
+							}
+						},
+						x: {
+							title: {
+								display: true,
+								text: 'Status'
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							display: true,
+							position: 'top'
+						}
+					}
+				}
+			};
+
+			chart = new Chart(ctx, config);
+		}
+
+		// Render grafik awal dengan data dari controller
+		const initialLabels = <?= json_encode($stats['labels'] ?? []) ?>;
+		const initialPengajuan = <?= json_encode($stats['pengajuan_data'] ?? []) ?>;
+		const initialPengaduan = <?= json_encode($stats['pengaduan_data'] ?? []) ?>;
+
+		if (initialLabels.length && initialPengajuan.length && initialPengaduan.length) {
+			renderChart(initialLabels, initialPengajuan, initialPengaduan);
+		} else {
+			console.error('Data awal untuk grafik kosong atau tidak valid.');
+		}
+
+		// Event listener untuk dropdown tahun
+		document.getElementById('tahun-select').addEventListener('change', function () {
+			const tahun = this.value;
+			fetch('<?= base_url('kepala/get_statistik') ?>/' + tahun, {
+				method: 'GET'
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.labels && data.pengajuan_data && data.pengaduan_data) {
+						renderChart(data.labels, data.pengajuan_data, data.pengaduan_data);
+					} else {
+						console.error('Data dari server tidak valid:', data);
+					}
+				})
+				.catch(error => console.error('Error fetching data:', error));
+		});
+	});
+</script>

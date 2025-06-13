@@ -13,16 +13,102 @@ class Kepala extends CI_Controller
 
 	public function index()
 	{
-
 		$user_id = $this->session->userdata('user_id');
+
+		// Ambil semua pengajuan
 		$pengajuan = $this->Pengajuan_model->get_all(null, null, null, null);
 
+		// Ambil data prioritas dari pengaduan
+		$pengaduan_prioritas = $this->Pengaduan_model->get_prioritas(3);
+
+		$this->load->helper('my_helper'); // Pastikan helper dimuat
+		foreach ($pengaduan_prioritas as &$item) {
+			if (isset($item->created_at) && $item->created_at) {
+				$item->waktu_relatif = time_elapsed_string($item->created_at);
+			} else {
+				$item->waktu_relatif = 'Waktu tidak valid';
+			}
+		}
+		unset($item);
+
+		$tahun = 2025; // Default dari dropdown, bisa diubah dinamis nanti
+
+		// Ambil statistik dari kedua model
+		$pengajuan_stats = $this->Pengajuan_model->get_statistik($tahun);
+		$pengaduan_stats = $this->Pengaduan_model->get_statistik($tahun);
+
+		// Gabungkan labels dari kedua model
+		$labels = array_unique(array_merge($pengajuan_stats['labels'], $pengaduan_stats['labels']));
+		$pengajuan_data = array_fill(0, count($labels), 0);
+		$pengaduan_data = array_fill(0, count($labels), 0);
+
+		// Isi data pengajuan sesuai label
+		foreach ($pengajuan_stats['labels'] as $index => $label) {
+			$key = array_search($label, $labels);
+			if ($key !== false) {
+				$pengajuan_data[$key] = $pengajuan_stats['data'][$index];
+			}
+		}
+
+		// Isi data pengaduan sesuai label
+		foreach ($pengaduan_stats['labels'] as $index => $label) {
+			$key = array_search($label, $labels);
+			if ($key !== false) {
+				$pengaduan_data[$key] = $pengaduan_stats['data'][$index];
+			}
+		}
+
+		// Siapkan data statistik untuk view
+		$stats = [
+			'labels' => $labels,
+			'pengajuan_data' => $pengajuan_data,
+			'pengaduan_data' => $pengaduan_data
+		];
+
 		$data = [
-			'title' => 'Status Pengajuan',
-			'pengajuan' => $pengajuan
+			'title' => 'Dashboard Kepala',
+			'pengajuan' => $pengajuan,
+			'pengaduan_prioritas' => $pengaduan_prioritas,
+			'stats' => $stats // Tambahkan stats ke data
 		];
 
 		$this->load->view('layouts/kepala', $data);
+	}
+
+	public function get_statistik($tahun)
+	{
+		// Ambil statistik dari kedua model
+		$pengajuan_stats = $this->Pengajuan_model->get_statistik($tahun);
+		$pengaduan_stats = $this->Pengaduan_model->get_statistik($tahun);
+
+		// Gabungkan labels dari kedua model
+		$labels = array_unique(array_merge($pengajuan_stats['labels'], $pengaduan_stats['labels']));
+		$pengajuan_data = array_fill(0, count($labels), 0);
+		$pengaduan_data = array_fill(0, count($labels), 0);
+
+		// Isi data pengajuan sesuai label
+		foreach ($pengajuan_stats['labels'] as $index => $label) {
+			$key = array_search($label, $labels);
+			if ($key !== false) {
+				$pengajuan_data[$key] = $pengajuan_stats['data'][$index];
+			}
+		}
+
+		// Isi data pengaduan sesuai label
+		foreach ($pengaduan_stats['labels'] as $index => $label) {
+			$key = array_search($label, $labels);
+			if ($key !== false) {
+				$pengaduan_data[$key] = $pengaduan_stats['data'][$index];
+			}
+		}
+
+		$stats = [
+			'labels' => $labels,
+			'pengajuan_data' => $pengajuan_data,
+			'pengaduan_data' => $pengaduan_data
+		];
+
+		echo json_encode($stats);
 	}
 
 	public function pengajuan()
