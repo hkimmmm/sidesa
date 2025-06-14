@@ -41,6 +41,9 @@ class Admin extends CI_Controller
 		$pengajuan_stats = $this->Pengajuan_model->get_statistik($tahun);
 		$pengaduan_stats = $this->Pengaduan_model->get_statistik($tahun);
 
+		$total_pengaduan_belum_disetujui = $this->Pengaduan_model->get_total_pengaduan_belum_disetujui();
+		$total_pengajuan_belum_disetujui = $this->Pengajuan_model->get_total_pengajuan_belum_disetujui();
+
 		// Gabungkan labels dari kedua model
 		$labels = array_unique(array_merge($pengajuan_stats['labels'], $pengaduan_stats['labels']));
 		$pengajuan_data = array_fill(0, count($labels), 0);
@@ -85,7 +88,9 @@ class Admin extends CI_Controller
 			'title' => 'Dashboard Admin',
 			'terbaru' => $terbaru_limit,
 			'pengajuan' => $pengajuan,
-			'stats' => $stats
+			'stats' => $stats,
+			'total_pengaduan_belum_disetujui' => $total_pengaduan_belum_disetujui,
+			'total_pengajuan_belum_disetujui' => $total_pengajuan_belum_disetujui
 		];
 
 		$this->load->view('layouts/admin', $data);

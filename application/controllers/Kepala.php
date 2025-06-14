@@ -58,6 +58,9 @@ class Kepala extends CI_Controller
 			}
 		}
 
+		$total_pengaduan_belum_disetujui = $this->Pengaduan_model->get_total_pengaduan_belum_disetujui();
+		$total_pengajuan_belum_disetujui = $this->Pengajuan_model->get_total_pengajuan_belum_disetujui();
+
 		// Siapkan data statistik untuk view
 		$stats = [
 			'labels' => $labels,
@@ -69,7 +72,9 @@ class Kepala extends CI_Controller
 			'title' => 'Dashboard Kepala',
 			'pengajuan' => $pengajuan,
 			'pengaduan_prioritas' => $pengaduan_prioritas,
-			'stats' => $stats // Tambahkan stats ke data
+			'stats' => $stats,
+			'total_pengaduan_belum_disetujui' => $total_pengaduan_belum_disetujui,
+			'total_pengajuan_belum_disetujui' => $total_pengajuan_belum_disetujui
 		];
 
 		$this->load->view('layouts/kepala', $data);

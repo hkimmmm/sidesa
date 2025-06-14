@@ -305,4 +305,9 @@ class Pengaduan_model extends CI_Model
 			'data' => $data
 		];
 	}
+	public function get_total_pengaduan_belum_disetujui()
+	{
+		$this->db->where('status', 'pending'); // Ganti 'pending' dengan nilai status yang sesuai
+		return $this->db->count_all_results('pengaduan'); // Ganti 'pengaduan' dengan nama tabel Anda
+	}
 }

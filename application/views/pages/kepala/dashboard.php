@@ -25,31 +25,30 @@
 		</div>
 
 		<!-- Pengajuan Menunggu -->
-		<div class="bg-white p-6 rounded-lg shadow">
-			<div class="flex items-center justify-between">
-				<div>
-					<p class="text-gray-500 text-sm">Pengajuan Menunggu</p>
-					<h3 class="text-2xl font-bold text-gray-800">8</h3>
-				</div>
-				<div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-					<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-						<path fill-rule="evenodd"
-							d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-							clip-rule="evenodd"></path>
-					</svg>
-				</div>
-			</div>
-			<p class="text-yellow-500 text-sm mt-2">Perlu persetujuan</p>
-		</div>
-
+<div class="bg-white p-6 rounded-lg shadow">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-gray-500 text-sm">Pengajuan Menunggu</p>
+            <h3 class="text-2xl font-bold text-gray-800"><?= $total_pengajuan_belum_disetujui ?: '0' ?></h3>
+        </div>
+        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </div>
+    </div>
+    <p class="text-yellow-500 text-sm mt-2">Perlu persetujuan</p>
+</div>
 		<!-- Pengaduan Prioritas -->
 		<div class="bg-white p-6 rounded-lg shadow">
 			<div class="flex items-center justify-between">
 				<div>
-					<p class="text-gray-500 text-sm">Pengaduan Prioritas</p>
-					<h3 class="text-2xl font-bold text-gray-800">3</h3>
+					<p class="text-gray-500 text-sm">Pengaduan Belum Disetujui</p>
+					<h3 class="text-2xl font-bold text-gray-800"><?= $total_pengaduan_belum_disetujui ?></h3>
 				</div>
-				<div class="p-3 rounded-full bg-red-100 text-red-600">
+				<div class="p-3 rounded-full bg-gray-100 text-gray-600">
 					<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
 						<path fill-rule="evenodd"
 							d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -57,7 +56,7 @@
 					</svg>
 				</div>
 			</div>
-			<p class="text-red-500 text-sm mt-2">Perlu tindakan segera</p>
+			<p class="text-gray-500 text-sm mt-2">Menunggu persetujuan</p>
 		</div>
 
 		<!-- Proyek Desa -->

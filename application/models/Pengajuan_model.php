@@ -309,4 +309,9 @@ class Pengajuan_model extends CI_Model
 			'data' => $data
 		];
 	}
+	public function get_total_pengajuan_belum_disetujui()
+	{
+		$this->db->where('status', 'pending');
+		return $this->db->count_all_results('pengajuan');
+	}
 }

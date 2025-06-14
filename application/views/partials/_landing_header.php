@@ -124,9 +124,11 @@
 				</button>
 				<div
 					class="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow mt-1 py-1 min-w-[140px] z-10">
-					<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-normal" href="#">Pengaduan
+					<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+						href="<?= base_url('pengaduan') ?>">Pengaduan
 						Masyarakat</a>
-					<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-normal" href="#">Pelayanan
+					<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+						href="<?= base_url('pengajuan') ?>">Pelayanan
 						Pengajuan Surat</a>
 				</div>
 			</div>

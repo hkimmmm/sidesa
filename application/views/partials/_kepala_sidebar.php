@@ -59,7 +59,7 @@
 				<p class="text-xs text-green-200">Administrator</p>
 			</div>
 		</div>
-		<a href="<?php echo base_url('logout'); ?>"
+		<a href="<?php echo base_url('auth/logout'); ?>"
 			class="flex items-center mt-3 p-2 text-sm rounded-lg hover:bg-green-600">
 			<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 				<path fill-rule="evenodd"
