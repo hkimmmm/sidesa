@@ -8,47 +8,28 @@ class Pengajuan_model extends CI_Model
 		parent::__construct();
 	}
 
-	// public function get_all($limit = null, $offset = null, $search = null, $status = null)
-	// {
-	//     $this->db->from('pengajuan p');
-	//     $this->db->join('jenis_surat js', 'js.id = p.jenis_surat_id');
-
-	//     if ($search) {
-	//         $this->db->group_start();
-	//         $this->db->like('js.nama_surat', $search);
-	//         $this->db->or_like('p.keperluan', $search);
-	//         $this->db->group_end();
-	//     }
-
-	//     if ($status) {
-	//         $this->db->where('p.status', $status);
-	//     }
-
-	//     $this->db->order_by('p.created_at', 'DESC');
-
-	//     if ($limit) {
-	//         $this->db->limit($limit, $offset);
-	//     }
-
-	//     $result = $this->db->get()->result_array();
-
-	//     foreach ($result as &$item) {
-	//         $item['nama_pemohon'] = 'masyarakat';
-	//     }
-
-	//     return $result;
-	// }
-	public function get_all($limit = null, $offset = null, $search = null, $status = null)
+	public function get_all($search = null, $jenis_surat_id = null, $tanggal = null, $status = null, $limit = null, $offset = null)
 	{
 		$this->db->select('p.id AS pengajuan_id, p.no_pengajuan, p.user_id, p.jenis_surat_id, p.keperluan, p.status, p.catatan, p.created_at, p.updated_at, js.nama_surat, js.kode_surat');
 		$this->db->from('pengajuan p');
 		$this->db->join('jenis_surat js', 'js.id = p.jenis_surat_id');
 
-		if ($search) {
+		if ($search) {	
 			$this->db->group_start();
-			$this->db->like('js.nama_surat', $search);
+			$this->db->like('p.no_pengajuan', $search);
+			$this->db->or_like('js.nama_surat', $search);
 			$this->db->or_like('p.keperluan', $search);
 			$this->db->group_end();
+		}
+
+		if ($jenis_surat_id) {
+			$this->db->where('p.jenis_surat_id', $jenis_surat_id);
+		}
+
+		// Filter tanggal
+		if ($tanggal && $tanggal[0] && $tanggal[1]) {
+			$this->db->where('p.created_at >=', $tanggal[0] . ' 00:00:00');
+			$this->db->where('p.created_at <=', $tanggal[1] . ' 23:59:59');
 		}
 
 		if ($status) {
@@ -71,16 +52,26 @@ class Pengajuan_model extends CI_Model
 		return $result;
 	}
 
-	public function count_all($search = null, $status = null)
+	public function count_all($search = null, $jenis_surat_id = null, $tanggal = null, $status = null)
 	{
 		$this->db->from('pengajuan p');
 		$this->db->join('jenis_surat js', 'js.id = p.jenis_surat_id');
 
 		if ($search) {
 			$this->db->group_start();
-			$this->db->like('js.nama_surat', $search);
+			$this->db->like('p.no_pengajuan', $search);
+			$this->db->or_like('js.nama_surat', $search);
 			$this->db->or_like('p.keperluan', $search);
 			$this->db->group_end();
+		}
+
+		if ($jenis_surat_id) {
+			$this->db->where('p.jenis_surat_id', $jenis_surat_id);
+		}
+
+		if ($tanggal && $tanggal[0] && $tanggal[1]) {
+			$this->db->where('p.created_at >=', $tanggal[0] . ' 00:00:00');
+			$this->db->where('p.created_at <=', $tanggal[1] . ' 23:59:59');
 		}
 
 		if ($status) {
@@ -233,7 +224,7 @@ class Pengajuan_model extends CI_Model
 
 	public function get_jenis_surat()
 	{
-		return $this->db->get('jenis_surat')->result_array();
+		return $this->db->get('jenis_surat')->result();
 	}
 
 	public function get_jenis_surat_by_id($id)

@@ -9,7 +9,7 @@ class Pengaduan_model extends CI_Model
 		parent::__construct();
 	}
 
-	public function get_all($start_date = null, $end_date = null, $jenis = null, $status = null)
+	public function get_all($start_date = null, $end_date = null, $jenis = null, $status = null, $tanggal = null, $limit = null, $offset = null, $prioritas = null)
 	{
 		$this->db->select('*');
 		$this->db->from('pengaduan');
@@ -19,12 +19,25 @@ class Pengaduan_model extends CI_Model
 			$this->db->where('tanggal_kejadian <=', $end_date);
 		}
 
+		if ($tanggal && $tanggal[0] && $tanggal[1]) {
+			$this->db->where('created_at >=', $tanggal[0] . ' 00:00:00');
+			$this->db->where('created_at <=', $tanggal[1] . ' 23:59:59');
+		}
+
+
+		if ($prioritas) {
+			$this->db->where('prioritas', $prioritas);
+		}
+
 		if (!empty($jenis)) {
 			$this->db->where('jenis_pengaduan', $jenis);
 		}
 
 		if (!empty($status)) {
 			$this->db->where('status', $status);
+		}
+		if ($limit !== null && $offset !== null) {
+			$this->db->limit($limit, $offset);
 		}
 
 		$this->db->order_by('tanggal_pengaduan', 'DESC');

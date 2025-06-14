@@ -213,12 +213,25 @@ class Pengaduan extends CI_Controller
 		// if ($this->session->userdata('role') != 'admin') {
 		// 	redirect('pengaduan');
 		// }
-
+		$search = $this->input->get('search');
 		$status = $this->input->get('status');
+		$prioritas = $this->input->get('prioritas');
+		$tanggal = $this->input->get('tanggal');
 
 		$data = [
 			'title' => 'Daftar Pengaduan',
-			'pengaduan' => $this->Pengaduan_model->get_all(null, null, null, $status),
+			'pengaduan' => $this->Pengaduan_model->get_all(
+				null,
+				null,
+				null,
+				$status,
+				null,
+				null,
+				null,
+				$prioritas
+			),
+			'tanggal' => $tanggal,
+			'prioritas' => $prioritas,
 			'status' => $status
 		];
 

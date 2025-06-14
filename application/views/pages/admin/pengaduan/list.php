@@ -39,6 +39,28 @@
 					<option value="selesai" <?= $status == 'selesai' ? 'selected' : '' ?>>Selesai</option>
 				</select>
 			</div>
+			<div>
+				<label for="prioritas" class="sr-only">Prioritas</label>
+				<select id="prioritas" name="prioritas"
+					class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg">
+					<option value="">Semua Prioritas</option>
+					<option value="rendah" <?= ($this->input->get('prioritas') == 'rendah') ? 'selected' : '' ?>>Rendah
+					</option>
+					<option value="sedang" <?= ($this->input->get('prioritas') == 'sedang') ? 'selected' : '' ?>>Sedang
+					</option>
+					<option value="tinggi" <?= ($this->input->get('prioritas') == 'tinggi') ? 'selected' : '' ?>>Tinggi
+					</option>
+					<option value="darurat" <?= ($this->input->get('prioritas') == 'darurat') ? 'selected' : '' ?>>Darurat
+					</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="tanggal" class="sr-only">Tanggal</label>
+				<input type="text" name="tanggal" id="tanggal"
+					class="block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+					placeholder="Pilih rentang tanggal" value="<?= $tanggal ?? '' ?>">
+			</div>
 			<button type="submit"
 				class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
 				Filter
@@ -115,3 +137,20 @@
 		</div>
 	<?php endif; ?>
 </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- JS Flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		flatpickr('#tanggal', {
+			mode: 'range',
+			dateFormat: 'Y-m-d',
+			altInput: true,
+			altFormat: 'F j, Y',
+			allowInput: false
+		});
+	});
+
+</script>

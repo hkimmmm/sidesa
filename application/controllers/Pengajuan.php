@@ -94,13 +94,26 @@ class Pengajuan extends CI_Controller
 
 	public function admin()
 	{
-
+		$search = $this->input->get('search');
 		$status = $this->input->get('status');
+		$jenis_surat_id = $this->input->get('jenis_surat');
+		$tanggal = $this->input->get('tanggal');
+
+		$tanggal_awal = null;
+		$tanggal_akhir = null;
+		if ($tanggal) {
+			$tanggal_arr = explode(' to ', $tanggal);
+			$tanggal_awal = trim($tanggal_arr[0]);
+			$tanggal_akhir = trim($tanggal_arr[1] ?? $tanggal_arr[0]);
+		}
 
 		$data = [
 			'title' => 'Daftar Pengajuan',
-			'pengajuan' => $this->Pengajuan_model->get_all(null, null, null, $status),
-			'status' => $status
+			'pengajuan' => $this->Pengajuan_model->get_all($search, $jenis_surat_id, [$tanggal_awal, $tanggal_akhir], $status),
+			'status' => $status,
+			'jenis_surat_id' => $jenis_surat_id,
+			'tanggal' => $tanggal,
+			'jenis_surat' => $this->Pengajuan_model->get_jenis_surat()
 		];
 
 		$this->load->view('layouts/pengajuan_list_admin', $data);

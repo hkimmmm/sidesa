@@ -137,44 +137,45 @@ $status_class = [
 			</div>
 		</div>
 
-		<div class="mt-8 pt-6 border-t border-gray-200">
-			<h3 class="text-lg font-medium text-gray-900 mb-4">Update Status Pengajuan</h3>
-			<?php echo form_open('pengajuan/update_status/' . $pengajuan['pengajuan_id']); ?>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-				<div>
-					<label class="block mb-2 text-sm font-medium text-gray-900">Status</label>
-					<select name="status"
-						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-						required>
-						<option value="proses" <?= $pengajuan['status'] == 'pending' ? 'selected' : '' ?>>Proses</option>
-						<option value="disetujui" <?= $pengajuan['status'] == 'disetujui' ? 'selected' : '' ?>>Disetujui
-						</option>
-						<option value="ditolak" <?= $pengajuan['status'] == 'ditolak' ? 'selected' : '' ?>>Ditolak</option>
-						<option value="selesai" <?= $pengajuan['status'] == 'selesai' ? 'selected' : '' ?>>Selesai</option>
-					</select>
+		<?php $CI =& get_instance(); ?>
+		<?php if ($CI->session->userdata('role') === 'admin') : ?>
+			<div class="mt-8 pt-6 border-t border-gray-200">
+				<h3 class="text-lg font-medium text-gray-900 mb-4">Update Status Pengajuan</h3>
+				<?php echo form_open('pengajuan/update_status/' . $pengajuan['pengajuan_id']); ?>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Status</label>
+						<select name="status" id="statusSelect"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+							required>
+							<option value="proses" <?= $pengajuan['status'] == 'pending' ? 'selected' : '' ?>>Proses</option>
+							<option value="disetujui" <?= $pengajuan['status'] == 'disetujui' ? 'selected' : '' ?>>Disetujui</option>
+							<option value="ditolak" <?= $pengajuan['status'] == 'ditolak' ? 'selected' : '' ?>>Ditolak</option>
+							<option value="selesai" <?= $pengajuan['status'] == 'selesai' ? 'selected' : '' ?>>Selesai</option>
+						</select>
+					</div>
+					<div id="catatanContainer" class="<?= $pengajuan['status'] == 'ditolak' ? '' : 'hidden' ?>">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Catatan (Opsional)</label>
+						<textarea name="catatan" rows="2"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"><?= $pengajuan['catatan'] ?></textarea>
+					</div>
 				</div>
-				<div>
-					<label class="block mb-2 text-sm font-medium text-gray-900">Catatan (Opsional)</label>
-					<textarea name="catatan" rows="2"
-						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"><?= $pengajuan['catatan'] ?></textarea>
-				</div>
+				<button type="submit"
+					class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+					Update Status
+				</button>
+				<?php
+				$jenis_surat = slugify($pengajuan['nama_surat']);
+				$nama_pemohon = slugify($pengajuan['nama_lengkap']);
+				$keperluan = slugify($pengajuan['keperluan']);
+				?>
+				<button onclick="formCetakSubmit()"
+					class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors inline-block">
+					Cetak
+				</button>
+				</form>
 			</div>
-			<button type="submit"
-				class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-				Update Status
-			</button>
-			<?php
-			$jenis_surat = slugify($pengajuan['nama_surat']);
-			$nama_pemohon = slugify($pengajuan['nama_lengkap']);
-			$keperluan = slugify($pengajuan['keperluan']);
-			?>
-
-			<button onclick="formCetakSubmit()"
-				class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors inline-block">
-				Cetak
-			</button>
-		</div>
-
+			<?php endif; ?>
 	</div>
 </div>
 
@@ -188,4 +189,19 @@ $status_class = [
 	function formCetakSubmit() {
 		document.getElementById('formCetak').submit();
 	}
+
+	const statusSelect = document.getElementById('statusSelect');
+		const catatanContainer = document.getElementById('catatanContainer');
+
+		function toggleCatatanField() {
+			if (statusSelect.value === 'ditolak') {
+				catatanContainer.classList.remove('hidden');
+			} else {
+				catatanContainer.classList.add('hidden');
+			}
+		}
+
+		// Panggil saat load dan saat berubah
+		toggleCatatanField();
+		statusSelect.addEventListener('change', toggleCatatanField);
 </script>

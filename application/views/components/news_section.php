@@ -8,7 +8,7 @@ $popular_news = isset($popular_news) ? $popular_news : [];
 		<h2 class="text-base sm:text-lg font-bold text-gray-900">
 			Berita Terkini
 		</h2>
-		<a href="<?= site_url('news') ?>"
+		<a href="<?= site_url('news/list') ?>"
 			class="mt-3 sm:mt-0 inline-flex items-center bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-4 py-1.5 rounded transition">
 			Lihat Semua Berita
 			<i class="fas fa-arrow-up-right ml-2"></i>
@@ -17,13 +17,10 @@ $popular_news = isset($popular_news) ? $popular_news : [];
 
 	<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 		<?php foreach ($latest_news as $news): ?>
-			<a href="<?= site_url('news/view/' . $news['slug']) ?>" class="relative rounded-lg overflow-hidden shadow hover:shadow-md transition">
-				<img
-					alt="<?= html_escape($news['judul']) ?>"
-					class="w-full h-40 sm:h-44 object-cover"
-					src="<?= base_url('uploads/news/' . $news['gambar']) ?>"
-					width="600"
-					height="300" />
+			<a href="<?= site_url('news/view/' . $news['slug']) ?>"
+				class="relative rounded-lg overflow-hidden shadow hover:shadow-md transition">
+				<img alt="<?= html_escape($news['judul']) ?>" class="w-full h-40 sm:h-44 object-cover"
+					src="<?= base_url('uploads/news/' . $news['gambar']) ?>" width="600" height="300" />
 				<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2.5">
 					<h3 class="text-white font-medium text-sm leading-snug">
 						<?= html_escape($news['judul']) ?>
