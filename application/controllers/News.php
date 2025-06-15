@@ -155,7 +155,7 @@ class News extends CI_Controller
 		$data['get_latest'] = $this->News_model->get_latest(6, 0);
 
 		// // Ambil berita populer (misal 3 berita dengan view terbanyak)
-		// $data['popular_news'] = $this->News_model->get_popular(3);
+		$data['popular_news'] = $this->News_model->get_popular(3);
 
 		// Ambil kategori berita jika diperlukan
 		// $data['categories'] = $this->News_category_model->get_all();

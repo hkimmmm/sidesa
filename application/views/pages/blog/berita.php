@@ -58,56 +58,25 @@
 					<h2 class="text-2xl font-bold text-[#0D7A3F] border-b-2 border-[#0D7A3F] pb-2 mb-6">Berita Populer
 					</h2>
 					<div class="grid md:grid-cols-3 gap-6">
-						<!-- Popular News 1 -->
-						<div class="bg-white rounded-lg shadow-md overflow-hidden">
-							<div class="relative">
-								<img src="<?= base_url('assets/images/news/popular1.jpg') ?>" alt="Popular News 1"
-									class="w-full h-40 object-cover">
-								<span
-									class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">POPULER</span>
+						<?php foreach ($popular_news as $news): ?>
+							<div class="bg-white rounded-lg shadow-md overflow-hidden">
+								<div class="relative">
+									<img src="<?= base_url('uploads/news/' . $news['gambar']) ?>"
+										alt="<?= $news['judul'] ?>" class="w-full h-40 object-cover">
+									<span
+										class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">POPULER</span>
+								</div>
+								<div class="p-4">
+									<div class="text-xs text-gray-500 mb-1">
+										<i class="far fa-calendar-alt mr-1"></i>
+										<?= date('d M Y', strtotime($news['created_at'])) ?>
+									</div>
+									<h4 class="font-bold text-gray-800 mb-2"><?= $news['judul'] ?></h4>
+									<a href="<?= base_url('news/detail/' . $news['slug']) ?>"
+										class="text-[#0D7A3F] text-sm font-semibold hover:underline">Baca Selengkapnya</a>
+								</div>
 							</div>
-							<div class="p-4">
-								<div class="text-xs text-gray-500 mb-1"><i class="far fa-calendar-alt mr-1"></i> 1 Juni
-									2023</div>
-								<h4 class="font-bold text-gray-800 mb-2">Festival Kuliner Procot 2023</h4>
-								<a href="#" class="text-[#0D7A3F] text-sm font-semibold hover:underline">Baca
-									Selengkapnya</a>
-							</div>
-						</div>
-
-						<!-- Popular News 2 -->
-						<div class="bg-white rounded-lg shadow-md overflow-hidden">
-							<div class="relative">
-								<img src="<?= base_url('assets/images/news/popular2.jpg') ?>" alt="Popular News 2"
-									class="w-full h-40 object-cover">
-								<span
-									class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">POPULER</span>
-							</div>
-							<div class="p-4">
-								<div class="text-xs text-gray-500 mb-1"><i class="far fa-calendar-alt mr-1"></i> 25 Mei
-									2023</div>
-								<h4 class="font-bold text-gray-800 mb-2">Pelatihan UMKM Gratis</h4>
-								<a href="#" class="text-[#0D7A3F] text-sm font-semibold hover:underline">Baca
-									Selengkapnya</a>
-							</div>
-						</div>
-
-						<!-- Popular News 3 -->
-						<div class="bg-white rounded-lg shadow-md overflow-hidden">
-							<div class="relative">
-								<img src="<?= base_url('assets/images/news/popular3.jpg') ?>" alt="Popular News 3"
-									class="w-full h-40 object-cover">
-								<span
-									class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">POPULER</span>
-							</div>
-							<div class="p-4">
-								<div class="text-xs text-gray-500 mb-1"><i class="far fa-calendar-alt mr-1"></i> 18 Mei
-									2023</div>
-								<h4 class="font-bold text-gray-800 mb-2">Gotong Royong Bersih Desa</h4>
-								<a href="#" class="text-[#0D7A3F] text-sm font-semibold hover:underline">Baca
-									Selengkapnya</a>
-							</div>
-						</div>
+						<?php endforeach; ?>
 					</div>
 				</div>
 
@@ -133,61 +102,23 @@
 
 					<!-- Recent News List -->
 					<div class="space-y-4">
-						<!-- News Item 1 -->
-						<div class="flex gap-3 pb-3 border-b border-gray-100">
-							<img src="<?= base_url('assets/images/news/side1.jpg') ?>" alt="Side News 1"
-								class="w-20 h-16 object-cover rounded">
-							<div>
-								<div class="text-xs text-gray-500 mb-1">14 Juni 2023</div>
-								<a href="#" class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">Rapat
-									Koordinasi RT/RW</a>
+						<?php foreach ($get_latest as $news): ?>
+							<div class="flex gap-3 pb-3 border-b border-gray-100">
+								<img src="<?= base_url('uploads/news/' . $news['gambar']) ?>" alt="<?= $news['judul'] ?>"
+									class="w-20 h-16 object-cover rounded">
+								<div>
+									<div class="text-xs text-gray-500 mb-1">
+										<?= date('d F Y', strtotime($news['created_at'])) ?>
+									</div>
+									<a href="<?= base_url('news/detail/' . $news['slug']) ?>"
+										class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">
+										<?= character_limiter($news['judul'], 60) ?>
+									</a>
+								</div>
 							</div>
-						</div>
-
-						<!-- News Item 2 -->
-						<div class="flex gap-3 pb-3 border-b border-gray-100">
-							<img src="<?= base_url('assets/images/news/side2.jpg') ?>" alt="Side News 2"
-								class="w-20 h-16 object-cover rounded">
-							<div>
-								<div class="text-xs text-gray-500 mb-1">10 Juni 2023</div>
-								<a href="#" class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">Pendaftaran
-									Bantuan Sosial</a>
-							</div>
-						</div>
-
-						<!-- News Item 3 -->
-						<div class="flex gap-3 pb-3 border-b border-gray-100">
-							<img src="<?= base_url('assets/images/news/side3.jpg') ?>" alt="Side News 3"
-								class="w-20 h-16 object-cover rounded">
-							<div>
-								<div class="text-xs text-gray-500 mb-1">5 Juni 2023</div>
-								<a href="#" class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">Jadwal
-									Perbaikan Jalan</a>
-							</div>
-						</div>
-
-						<!-- News Item 4 -->
-						<div class="flex gap-3 pb-3 border-b border-gray-100">
-							<img src="<?= base_url('assets/images/news/side4.jpg') ?>" alt="Side News 4"
-								class="w-20 h-16 object-cover rounded">
-							<div>
-								<div class="text-xs text-gray-500 mb-1">2 Juni 2023</div>
-								<a href="#" class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">Pelaksanaan
-									Vaksinasi</a>
-							</div>
-						</div>
-
-						<!-- News Item 5 -->
-						<div class="flex gap-3">
-							<img src="<?= base_url('assets/images/news/side5.jpg') ?>" alt="Side News 5"
-								class="w-20 h-16 object-cover rounded">
-							<div>
-								<div class="text-xs text-gray-500 mb-1">28 Mei 2023</div>
-								<a href="#" class="text-sm font-medium text-gray-800 hover:text-[#0D7A3F]">Lomba 17-an
-									Tingkat Kelurahan</a>
-							</div>
-						</div>
+						<?php endforeach; ?>
 					</div>
+
 
 					<!-- Newsletter Subscription -->
 					<div class="mt-8 p-4 bg-gray-50 rounded-lg">

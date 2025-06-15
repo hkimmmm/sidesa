@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Organisasi_model extends CI_Model {
+class Prasarana_model extends CI_Model {
 
     public function __construct()
     {
@@ -10,16 +10,19 @@ class Organisasi_model extends CI_Model {
 
     public function get_all($search = null, $limit = null, $offset = null)
     {
-        $this->db->from('organisasi_desa');
+        $this->db->select('prasarana.*, jenis_prasarana.nama_jenis');
+        $this->db->from('prasarana');
+        $this->db->join('jenis_prasarana', 'jenis_prasarana.id = prasarana.jenis_id');
         
         if ($search) {
             $this->db->group_start();
-            $this->db->like('nama', $search);
-            $this->db->or_like('jabatan', $search);
+            $this->db->like('prasarana.nama_prasarana', $search);
+            $this->db->or_like('jenis_prasarana.nama_jenis', $search);
+            $this->db->or_like('prasarana.lokasi', $search);
             $this->db->group_end();
         }
         
-        $this->db->order_by('urutan', 'ASC');
+        $this->db->order_by('prasarana.nama_prasarana', 'ASC');
         
         if ($limit !== null && $offset !== null) {
             $this->db->limit($limit, $offset);
@@ -30,12 +33,14 @@ class Organisasi_model extends CI_Model {
     
     public function count_all($search = null)
     {
-        $this->db->from('organisasi_desa');
+        $this->db->from('prasarana');
+        $this->db->join('jenis_prasarana', 'jenis_prasarana.id = prasarana.jenis_id');
         
         if ($search) {
             $this->db->group_start();
-            $this->db->like('nama', $search);
-            $this->db->or_like('jabatan', $search);
+            $this->db->like('prasarana.nama_prasarana', $search);
+            $this->db->or_like('jenis_prasarana.nama_jenis', $search);
+            $this->db->or_like('prasarana.lokasi', $search);
             $this->db->group_end();
         }
         
@@ -44,8 +49,16 @@ class Organisasi_model extends CI_Model {
     
     public function get_by_id($id)
     {
-        $this->db->where('id', $id);
-        return $this->db->get('organisasi_desa')->row();
+        $this->db->select('prasarana.*, jenis_prasarana.nama_jenis');
+        $this->db->from('prasarana');
+        $this->db->join('jenis_prasarana', 'jenis_prasarana.id = prasarana.jenis_id');
+        $this->db->where('prasarana.id', $id);
+        return $this->db->get()->row();
+    }
+    
+    public function get_jenis_prasarana()
+    {
+        return $this->db->get('jenis_prasarana')->result();
     }
     
     public function create($data, $foto = null)
@@ -54,7 +67,7 @@ class Organisasi_model extends CI_Model {
             $data['foto'] = $this->upload_foto($foto);
         }
         
-        $this->db->insert('organisasi_desa', $data);
+        $this->db->insert('prasarana', $data);
         return $this->db->insert_id();
     }
     
@@ -71,7 +84,7 @@ class Organisasi_model extends CI_Model {
             $data['foto'] = $this->upload_foto($foto);
         }
         
-        return $this->db->update('organisasi_desa', $data);
+        return $this->db->update('prasarana', $data);
     }
     
     public function delete($id)
@@ -82,12 +95,12 @@ class Organisasi_model extends CI_Model {
         }
         
         $this->db->where('id', $id);
-        return $this->db->delete('organisasi_desa');
+        return $this->db->delete('prasarana');
     }
     
     private function upload_foto($file)
     {
-        $config['upload_path'] = './uploads/organisasi/';
+        $config['upload_path'] = './uploads/prasarana/';
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size'] = 2048; // 2MB
         $config['encrypt_name'] = true;
@@ -98,7 +111,7 @@ class Organisasi_model extends CI_Model {
             return null;
         } else {
             $upload_data = $this->upload->data();
-            return 'uploads/organisasi/' . $upload_data['file_name'];
+            return 'uploads/prasarana/' . $upload_data['file_name'];
         }
     }
     

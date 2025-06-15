@@ -22,6 +22,18 @@
 			</li>
 
 			<li>
+				<a href="<?= base_url('admin/banner'); ?>"
+					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
+					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+						<path
+							d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm1 3a1 1 0 110 2 1 1 0 010-2zm3 4l2 2 3-3 4 5H5l3-4z" />
+					</svg>
+					<span class="ml-3">Banner</span>
+				</a>
+			</li>
+
+
+			<li>
 				<a href="<?php echo base_url('news'); ?>"
 					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
 					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -51,11 +63,13 @@
 				</button>
 				<ul id="dropdown-penduduk" class="hidden py-2 space-y-2 pl-11">
 					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Data
+						<a href="<?php echo base_url('admin/data_keluarga'); ?>"
+							class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Data
 							Keluarga</a>
 					</li>
 					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Data
+						<a href="<?php echo base_url('admin/data_individu'); ?>"
+							class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Data
 							Individu</a>
 					</li>
 					<li>
@@ -107,7 +121,7 @@
 			</li>
 
 			<li>
-				<a href="<?php echo base_url('admin/organisasi'); ?>"
+				<a href="<?php echo base_url('organisasi'); ?>"
 					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
 					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 						<path fill-rule="evenodd"
@@ -119,7 +133,7 @@
 			</li>
 
 			<li>
-				<a href="<?php echo base_url('admin/prasarana'); ?>"
+				<a href="<?php echo base_url('prasarana'); ?>"
 					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
 					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 						<path fill-rule="evenodd"

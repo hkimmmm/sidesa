@@ -134,19 +134,50 @@ class Admin extends CI_Controller
 	}
 
 
-	public function organisasi()
+	public function data_keluarga()
 	{
 		$user_id = $this->session->userdata('user_id');
-		$data['title'] = 'Organisasi';
+		$data['title'] = 'Data Keluarga';
 
-		$this->load->view('layouts/organisasi', $data);
+		$this->load->view('layouts/datakeluarga', $data);
 	}
 
-	public function prasarana()
+	public function data_individu()
 	{
 		$user_id = $this->session->userdata('user_id');
-		$data['title'] = 'Prasarana';
+		$data['title'] = 'Data Individu';
 
-		$this->load->view('layouts/prasarana', $data);
+		$this->load->view('layouts/data_individu', $data);
+	}
+	public function data_mutasi()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Data Mutasi';
+
+		$this->load->view('layouts/data_mutasi', $data);
+	}
+
+	public function banner()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Daftar Banner';
+
+		$this->load->view('layouts/banner', $data);
+	}
+
+	public function statistik_penduduk()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Statistik Penduduk';
+
+		$this->load->view('layouts/statistik_penduduk', $data);
+	}
+
+	public function add_banner()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Tambah Banner';
+
+		$this->load->view('layouts/tambah_banner', $data);
 	}
 }
