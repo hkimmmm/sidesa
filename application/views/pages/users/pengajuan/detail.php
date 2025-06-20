@@ -118,17 +118,8 @@ $status_class = [
 				<?php endforeach; ?>
 			</div>
 			<div id="cetakUser" class="mt-5 hidden">
-
 				<form id="formCetak" action="<?= base_url('cetak/cetak_surat') ?>" method="post" target="_blank">
-					<input type="hidden" name="status" value="<?= $track['status'] ?>">
-					<input type="hidden" name="jenis_surat" value="<?= htmlspecialchars($pengajuan['nama_surat']) ?>">
-					<input type="hidden" name="nama" value="<?= htmlspecialchars($pengajuan['nama_lengkap']) ?>">
-					<input type="hidden" name="nik" value="<?= htmlspecialchars($pengajuan['nik']) ?>">
-					<input type="hidden" name="no_pengajuan"
-						value="<?= htmlspecialchars($pengajuan['no_pengajuan']) ?>">
-					<input type="hidden" name="ttl" value="<?= htmlspecialchars($pengajuan['ttl']) ?>">
-					<input type="hidden" name="pekerjaan" value="<?= htmlspecialchars($pengajuan['pekerjaan']) ?>">
-
+					<input type="hidden" name="pengajuan_id" value="<?= $pengajuan['pengajuan_id'] ?>">
 					<button type="submit"
 						class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors inline-block">
 						Cetak
@@ -137,8 +128,8 @@ $status_class = [
 			</div>
 		</div>
 
-		<?php $CI =& get_instance(); ?>
-		<?php if ($CI->session->userdata('role') === 'admin') : ?>
+		<?php $CI = &get_instance(); ?>
+		<?php if ($CI->session->userdata('role') === 'admin'): ?>
 			<div class="mt-8 pt-6 border-t border-gray-200">
 				<h3 class="text-lg font-medium text-gray-900 mb-4">Update Status Pengajuan</h3>
 				<?php echo form_open('pengajuan/update_status/' . $pengajuan['pengajuan_id']); ?>
@@ -149,7 +140,8 @@ $status_class = [
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 							required>
 							<option value="proses" <?= $pengajuan['status'] == 'pending' ? 'selected' : '' ?>>Proses</option>
-							<option value="disetujui" <?= $pengajuan['status'] == 'disetujui' ? 'selected' : '' ?>>Disetujui</option>
+							<option value="disetujui" <?= $pengajuan['status'] == 'disetujui' ? 'selected' : '' ?>>Disetujui
+							</option>
 							<option value="ditolak" <?= $pengajuan['status'] == 'ditolak' ? 'selected' : '' ?>>Ditolak</option>
 							<option value="selesai" <?= $pengajuan['status'] == 'selesai' ? 'selected' : '' ?>>Selesai</option>
 						</select>
@@ -175,7 +167,7 @@ $status_class = [
 				</button>
 				</form>
 			</div>
-			<?php endif; ?>
+		<?php endif; ?>
 	</div>
 </div>
 
@@ -191,17 +183,17 @@ $status_class = [
 	}
 
 	const statusSelect = document.getElementById('statusSelect');
-		const catatanContainer = document.getElementById('catatanContainer');
+	const catatanContainer = document.getElementById('catatanContainer');
 
-		function toggleCatatanField() {
-			if (statusSelect.value === 'ditolak') {
-				catatanContainer.classList.remove('hidden');
-			} else {
-				catatanContainer.classList.add('hidden');
-			}
+	function toggleCatatanField() {
+		if (statusSelect.value === 'ditolak') {
+			catatanContainer.classList.remove('hidden');
+		} else {
+			catatanContainer.classList.add('hidden');
 		}
+	}
 
-		// Panggil saat load dan saat berubah
-		toggleCatatanField();
-		statusSelect.addEventListener('change', toggleCatatanField);
+	// Panggil saat load dan saat berubah
+	toggleCatatanField();
+	statusSelect.addEventListener('change', toggleCatatanField);
 </script>

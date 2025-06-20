@@ -23,7 +23,7 @@
 						required>
 						<option value="" selected disabled>Pilih jenis surat</option>
 						<?php foreach ($jenis_surat as $js): ?>
-							<option value="<?= $js['id'] ?>" data-jenis="<?= $js['nama_surat'] ?>"><?= $js['nama_surat'] ?>
+							<option value="<?= $js->id ?>" data-jenis="<?= $js->nama_surat ?>"><?= $js->nama_surat ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -184,26 +184,20 @@
 				case 'Surat Keterangan Tidak Mampu':
 					addSKTMFields();
 					break;
-				case 'Surat Pindah Domisili':
-					addPindahDomisiliFields();
+				case 'Surat Keterangan Domisili Perorangan':
+					addDomisiliPeroranganFields();
 					break;
-				case 'Surat Kematian':
-					addKematianFields();
+				case 'Surat Keterangan Domisili Usaha':
+					addDomisiliUsahaFields();
 					break;
-				case 'Surat Slip Gaji Orang Tua':
-					addSlipGajiFields();
+				case 'Surat Izin Hajatan':
+					addIzinHajatanFields();
 					break;
-				case 'Surat Pengantar Nikah':
-					addPengantarNikahFields();
+				case 'Surat Keterangan Penghasilan':
+					addKeteranganPenghasilanFields();
 					break;
-				case 'Surat Talak, Cerai, Rujuk':
-					addTalakCeraiFields();
-					break;
-				case 'Surat Pengantar Pembuatan KK Baru':
-					addKKBaruFields();
-					break;
-				case 'Surat Pengantar KTP':
-					addPengantarKTPFields();
+				case 'Surat Keterangan Umum':
+					addKeteranganUmumFields();
 					break;
 			}
 		});
@@ -212,129 +206,23 @@
 			const html = `
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor KK</label>
-						<input type="text" name="no_kk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Kartu Keluarga">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Orang Tua/Wali</label>
+						<input type="text" name="nama_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama lengkap orang tua atau wali">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
+						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Orang Tua/Wali</label>
+						<input type="text" name="nik_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="NIK sesuai KTP">
 					</div>
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
-						<textarea name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat sesuai KTP"></textarea>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir Orang Tua</label>
+						<input type="text" name="ttl_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Tegal, 21 Juni 1970">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
-						<input type="text" name="pekerjaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Pekerjaan saat ini">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Orang Tua</label>
-						<input type="text" name="nama_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Jika pemohon pelajar/mahasiswa">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tujuan Penggunaan</label>
-						<input type="text" name="tujuan_sktm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: untuk beasiswa, sekolah, dll">
-					</div>
-				</div>
-			`;
-			dynamicFields.innerHTML = html;
-		}
-
-		function addPindahDomisiliFields() {
-			const html = `
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor KK</label>
-						<input type="text" name="no_kk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Kartu Keluarga">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lama</label>
-						<textarea name="alamat_lama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat saat ini"></textarea>
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Tujuan Pindah</label>
-						<textarea name="alamat_baru" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat baru yang dituju"></textarea>
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Jumlah Anggota Keluarga yang Ikut Pindah</label>
-						<input type="number" name="jumlah_anggota_pindah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" min="1" value="1">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alasan Pindah</label>
-						<input type="text" name="alasan_pindah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: pekerjaan, pendidikan, dll">
-					</div>
-				</div>
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Daftar Anggota Keluarga yang Pindah</label>
-					<div id="anggota-keluarga-list">
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Nama Lengkap</label>
-								<input type="text" name="anggota_nama[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">NIK</label>
-								<input type="text" name="anggota_nik[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-						</div>
-					</div>
-					<button type="button" id="tambah-anggota" class="mt-2 text-sm text-blue-600 hover:text-blue-800">+ Tambah Anggota Keluarga</button>
-				</div>
-			`;
-			dynamicFields.innerHTML = html;
-
-			// Add functionality to add more family members
-			document.getElementById('tambah-anggota').addEventListener('click', function () {
-				const anggotaList = document.getElementById('anggota-keluarga-list');
-				const newAnggota = document.createElement('div');
-				newAnggota.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-2';
-				newAnggota.innerHTML = `
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Nama Lengkap</label>
-						<input type="text" name="anggota_nama[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">NIK</label>
-						<input type="text" name="anggota_nik[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				`;
-				anggotaList.appendChild(newAnggota);
-			});
-		}
-
-		function addKematianFields() {
-			const html = `
-				<h4 class="text-md font-medium text-gray-900 mb-3">Data Almarhum/Almarhumah</h4>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Lengkap</label>
-						<input type="text" name="nama_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama almarhum/almarhumah">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor KK</label>
-						<input type="text" name="no_kk_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor KK almarhum/almarhumah">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Kelamin</label>
-						<select name="jk_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Kelamin Orang Tua</label>
+						<select name="jenis_kelamin_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+							<option value="">-- Pilih --</option>
 							<option value="Laki-laki">Laki-laki</option>
 							<option value="Perempuan">Perempuan</option>
 						</select>
@@ -342,500 +230,353 @@
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
+						<input type="text" name="pekerjaan_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Petani, Buruh, dll">
+					</div>
+					<div>
 						<label class="block mb-2 text-sm font-medium text-gray-900">Agama</label>
-						<input type="text" name="agama_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Agama almarhum/almarhumah">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
-						<input type="text" name="pekerjaan_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Pekerjaan terakhir">
+						<input type="text" name="agama_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Islam, Kristen">
 					</div>
 				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Terakhir</label>
-						<textarea name="alamat_alm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat terakhir almarhum/almarhumah"></textarea>
-					</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat</label>
+					<textarea name="alamat_ortu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat sesuai KTP"></textarea>
 				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Kematian</label>
-						<input type="date" name="tanggal_kematian" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Waktu Kematian</label>
-						<input type="time" name="waktu_kematian" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Sebab Kematian</label>
-						<input type="text" name="sebab_kematian" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Jika diketahui">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat Kematian</label>
-						<input type="text" name="tempat_kematian" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Rumah sakit, rumah, dll">
-					</div>
-				</div>
-				
-				<h4 class="text-md font-medium text-gray-900 mb-3 mt-6">Data Pelapor</h4>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Lengkap Pelapor</label>
-						<input type="text" name="nama_pelapor" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama pelapor">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Pelapor</label>
-						<input type="text" name="nik_pelapor" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Hubungan dengan yang Meninggal</label>
-						<input type="text" name="hubungan_pelapor" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Anak, saudara, dll">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Pelapor</label>
-						<input type="text" name="alamat_pelapor" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Alamat pelapor">
-					</div>
-				</div>
-			`;
-			dynamicFields.innerHTML = html;
-		}
 
-		function addSlipGajiFields() {
-			const html = `
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor KK</label>
-						<input type="text" name="no_kk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Kartu Keluarga">
+						<label class="block mb-2 text-sm font-medium text-gray-900">RT</label>
+						<input type="text" name="rt" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
+						<label class="block mb-2 text-sm font-medium text-gray-900">RW</label>
+						<input type="text" name="rw" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
-						<textarea name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat sesuai KTP"></textarea>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor Surat Pengantar RT</label>
+						<input type="text" name="nomor_pengantar" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 					</div>
 				</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Surat Pengantar</label>
+					<input type="date" name="tanggal_pengantar" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+				</div>
+
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
-						<input type="text" name="pekerjaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Pekerjaan saat ini">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Penghasilan per Bulan (Rp)</label>
+						<input type="number" name="penghasilan_perbulan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: 1000000">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Estimasi Penghasilan per Bulan</label>
-						<input type="text" name="penghasilan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Dalam Rupiah">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jumlah Tanggungan Keluarga</label>
+						<input type="number" name="jumlah_tanggungan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: 4">
 					</div>
 				</div>
+
+				<hr class="my-4">
+
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Jumlah Tanggungan</label>
-						<input type="number" name="jumlah_tanggungan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" min="0" value="0">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Anak yang Mengajukan (jika untuk beasiswa/sekolah)</label>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Pemohon (Anak)</label>
 						<input type="text" name="nama_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Pemohon</label>
+						<input type="text" name="nik_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir Pemohon</label>
+						<input type="text" name="ttl_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Kelamin Pemohon</label>
+						<select name="jenis_kelamin_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+							<option value="">-- Pilih --</option>
+							<option value="Laki-laki">Laki-laki</option>
+							<option value="Perempuan">Perempuan</option>
+						</select>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Agama Pemohon</label>
+						<input type="text" name="agama_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Pemohon</label>
+						<textarea name="alamat_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2"></textarea>
+					</div>
 				</div>
 			`;
 			dynamicFields.innerHTML = html;
 		}
 
-		function addPengantarNikahFields() {
+		function addDomisiliPeroranganFields() {
 			const html = `
-				<h4 class="text-md font-medium text-gray-900 mb-3">Data Calon Pengantin Pria</h4>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Lengkap</label>
-						<input type="text" name="nama_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama calon pengantin pria">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
+						<input type="text" name="tempat_tanggal_lahir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Purbalingga, 04 Februari 1984">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Kewarganegaraan</label>
+						<input type="text" name="kewarganegaraan" value="Indonesia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Agama</label>
+						<input type="text" name="agama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Islam">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Kelamin</label>
+						<select name="jenis_kelamin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+							<option value="">-- Pilih --</option>
+							<option value="Laki-laki">Laki-laki</option>
+							<option value="Perempuan">Perempuan</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Status Perkawinan</label>
+						<input type="text" name="status_perkawinan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Cerai Belum Tercatat">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
+						<input type="text" name="pekerjaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Buruh Harian Lepas">
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat KTP (Alamat Terdaftar)</label>
+					<textarea name="alamat_ktp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Contoh: RT 017 / RW 009 Kel. Metenggeng Kec. Bojongsari"></textarea>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Domisili Saat Ini</label>
+					<textarea name="alamat_domisili" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Contoh: Jl. Mangga RT.002/RW.004 Kel. Procot Kec. Slawi Kab. Tegal"></textarea>
+				</div>
+			`;
+			dynamicFields.innerHTML = html;
+		}
+
+		function addDomisiliUsahaFields() {
+			const html = `
+				<h4 class="text-md font-medium text-gray-900 mb-3">Data Usaha</h4>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Usaha</label>
+						<input type="text" name="nama_usaha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Warung Sembako Pak Joko">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Usaha</label>
+						<input type="text" name="jenis_usaha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Sembako, bengkel, warteg, dll">
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Usaha</label>
+					<textarea name="alamat_usaha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat lengkap tempat usaha dijalankan"></textarea>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Lama Usaha Berjalan</label>
+						<input type="text" name="lama_usaha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: 2 tahun, 6 bulan, dll">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Status Tempat Usaha</label>
+						<select name="status_tempat_usaha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+							<option value="">-- Pilih --</option>
+							<option value="Milik Sendiri">Milik Sendiri</option>
+							<option value="Sewa">Sewa</option>
+							<option value="Pinjam">Pinjam</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Keterangan Tambahan</label>
+					<textarea name="keterangan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Opsional: misalnya usaha untuk pengajuan UMKM, bank, dll."></textarea>
+				</div>
+			`;
+			dynamicFields.innerHTML = html;
+		}
+
+		function addIzinHajatanFields() {
+			const html = `
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
+						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Tegal, 12 Desember 1956">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
+						<input type="text" name="pekerjaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Wiraswasta">
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
+					<textarea name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Contoh: RT 001 / RW 004 Kelurahan Procot, Kecamatan Slawi, Kabupaten Tegal"></textarea>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Hajatan</label>
+						<input type="text" name="jenis_hajatan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Khajatan Pernikahan">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Hari Acara</label>
+						<input type="text" name="hari_acara" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: RABU s.d. KAMIS">
+					</div>
+				</div>
+
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Acara</label>
+					<input type="text" name="tanggal_acara" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: 13 s.d. 14 April 2016">
+				</div>
+			`;
+			dynamicFields.innerHTML = html;
+		}
+
+		function addKeteranganPenghasilanFields() {
+			const html = `
+				<h4 class="text-md font-medium text-gray-900 mb-3">Data Ayah/Wali</h4>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Ayah/Wali</label>
+						<input type="text" name="nama_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Ayah/Wali</label>
+						<input type="text" name="nik_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+				</div>
+				<div class="grid grid-cols-1 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Ayah/Wali</label>
+						<textarea name="alamat_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" rows="2"></textarea>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan Utama</label>
+						<input type="text" name="pekerjaan_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Penghasilan Utama (Rp)</label>
+						<input type="text" name="penghasilan_utama_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+				</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Penghasilan Tambahan (Rp)</label>
+					<input type="text" name="penghasilan_tambahan_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+				</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Rincian Penghasilan Tambahan Ayah/Wali</label>
+					<textarea name="rincian_tambahan_ayah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" rows="2" placeholder="Contoh: Ojek - Rp 500.000, Bertani - Rp 1.000.000"></textarea>
+				</div>
+
+				<h4 class="text-md font-medium text-gray-900 mb-3 mt-6">Data Ibu</h4>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Ibu</label>
+						<input type="text" name="nama_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Ibu</label>
+						<input type="text" name="nik_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+				</div>
+				<div class="grid grid-cols-1 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Ibu</label>
+						<textarea name="alamat_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" rows="2"></textarea>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan Utama</label>
+						<input type="text" name="pekerjaan_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Penghasilan Utama (Rp)</label>
+						<input type="text" name="penghasilan_utama_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+					</div>
+				</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Penghasilan Tambahan (Rp)</label>
+					<input type="text" name="penghasilan_tambahan_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+				</div>
+				<div class="mb-4">
+					<label class="block mb-2 text-sm font-medium text-gray-900">Rincian Penghasilan Tambahan Ibu</label>
+					<textarea name="rincian_tambahan_ibu" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" rows="2" placeholder="Contoh: Jualan - Rp 300.000, Menjahit - Rp 700.000"></textarea>
+				</div>
+
+				<h4 class="text-md font-medium text-gray-900 mb-3 mt-6">Data Anak (Pemohon)</h4>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Nama</label>
+						<input type="text" name="nama_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
 					</div>
 					<div>
 						<label class="block mb-2 text-sm font-medium text-gray-900">NIK</label>
-						<input type="text" name="nik_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
+						<input type="text" name="nik_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
 					</div>
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
 						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
+						<input type="text" name="ttl_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
-						<input type="text" name="alamat_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Status Pernikahan</label>
-						<select name="status_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							<option value="Lajang">Lajang</option>
-							<option value="Duda">Duda</option>
-						</select>
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Agama</label>
-						<input type="text" name="agama_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
+						<input type="text" name="pekerjaan_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
 					</div>
 				</div>
 				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Nama Orang Tua/Wali</label>
-					<input type="text" name="ortu_pria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-				</div>
-				
-				<h4 class="text-md font-medium text-gray-900 mb-3 mt-6">Data Calon Pengantin Wanita</h4>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Lengkap</label>
-						<input type="text" name="nama_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama calon pengantin wanita">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">NIK</label>
-						<input type="text" name="nik_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
-						<input type="text" name="alamat_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Status Pernikahan</label>
-						<select name="status_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							<option value="Lajang">Lajang</option>
-							<option value="Janda">Janda</option>
-						</select>
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Agama</label>
-						<input type="text" name="agama_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				</div>
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Nama Orang Tua/Wali</label>
-					<input type="text" name="ortu_wanita" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-				</div>
-				
-				<div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-					<div class="flex">
-						<svg class="flex-shrink-0 w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-						</svg>
-						<div class="ml-3">
-							<h3 class="text-sm font-medium text-yellow-800">Dokumen yang Perlu Disiapkan</h3>
-							<div class="mt-2 text-sm text-yellow-700">
-								<ul class="list-disc pl-5 space-y-1">
-									<li>Fotokopi KK dan KTP masing-masing calon pengantin</li>
-									<li>Surat pengantar dari RT/RW setempat</li>
-									<li>Pas foto 3x4 (latar merah) masing-masing 2 lembar</li>
-								</ul>
-							</div>
-						</div>
-					</div>
+					<label class="block mb-2 text-sm font-medium text-gray-900">Alamat</label>
+					<textarea name="alamat_anak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" rows="2"></textarea>
 				</div>
 			`;
 			dynamicFields.innerHTML = html;
 		}
 
-		function addTalakCeraiFields() {
-			const html = `
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Suami</label>
-						<input type="text" name="nama_suami" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama lengkap suami">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Suami</label>
-						<input type="text" name="nik_suami" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Suami</label>
-						<textarea name="alamat_suami" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2"></textarea>
-					</div>
-				</div>
-				
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Istri</label>
-						<input type="text" name="nama_istri" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama lengkap istri">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Istri</label>
-						<input type="text" name="nik_istri" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Istri</label>
-						<textarea name="alamat_istri" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2"></textarea>
-					</div>
-				</div>
-				
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Pernikahan</label>
-						<input type="date" name="tanggal_nikah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor Akta Nikah</label>
-						<input type="text" name="no_akta_nikah" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				</div>
-				
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alasan Talak/Cerai/Rujuk</label>
-						<textarea name="alasan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="3"></textarea>
-					</div>
-				</div>
-				
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Data Anak (jika ada)</label>
-					<div id="anak-list">
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Nama Anak</label>
-								<input type="text" name="nama_anak[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Umur</label>
-								<input type="text" name="umur_anak[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-						</div>
-					</div>
-					<button type="button" id="tambah-anak" class="mt-2 text-sm text-blue-600 hover:text-blue-800">+ Tambah Data Anak</button>
-				</div>
-				
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Data Saksi (bila diperlukan)</label>
-					<div id="saksi-list">
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Nama Saksi</label>
-								<input type="text" name="nama_saksi[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">NIK Saksi</label>
-								<input type="text" name="nik_saksi[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-						</div>
-					</div>
-					<button type="button" id="tambah-saksi" class="mt-2 text-sm text-blue-600 hover:text-blue-800">+ Tambah Saksi</button>
-				</div>
-			`;
-			dynamicFields.innerHTML = html;
-
-			// Add functionality to add more children
-			document.getElementById('tambah-anak').addEventListener('click', function () {
-				const anakList = document.getElementById('anak-list');
-				const newAnak = document.createElement('div');
-				newAnak.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-2';
-				newAnak.innerHTML = `
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Nama Anak</label>
-						<input type="text" name="nama_anak[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Umur</label>
-						<input type="text" name="umur_anak[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				`;
-				anakList.appendChild(newAnak);
-			});
-
-			// Add functionality to add more witnesses
-			document.getElementById('tambah-saksi').addEventListener('click', function () {
-				const saksiList = document.getElementById('saksi-list');
-				const newSaksi = document.createElement('div');
-				newSaksi.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-2';
-				newSaksi.innerHTML = `
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Nama Saksi</label>
-						<input type="text" name="nama_saksi[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">NIK Saksi</label>
-						<input type="text" name="nik_saksi[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-				`;
-				saksiList.appendChild(newSaksi);
-			});
-		}
-
-		function addKKBaruFields() {
-			const html = `
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nama Kepala Keluarga</label>
-						<input type="text" name="nama_kepala_keluarga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nama lengkap kepala keluarga">
-					</div>
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">NIK Kepala Keluarga</label>
-						<input type="text" name="nik_kepala_keluarga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nomor Induk Kependudukan">
-					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Domisili</label>
-						<textarea name="alamat_domisili" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2"></textarea>
-					</div>
-				</div>
-				<div class="grid grid-cols-1 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alasan Pembuatan KK</label>
-						<select name="alasan_pembuatan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							<option value="Baru">Baru (Keluarga baru)</option>
-							<option value="Pindah">Pindah Domisili</option>
-							<option value="Pecah">Pecah KK</option>
-							<option value="Lainnya">Lainnya</option>
-						</select>
-					</div>
-				</div>
-				
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Daftar Anggota Keluarga</label>
-					<div id="anggota-kk-list">
-						<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Nama Lengkap</label>
-								<input type="text" name="anggota_kk_nama[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">NIK</label>
-								<input type="text" name="anggota_kk_nik[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							</div>
-							<div>
-								<label class="block mb-1 text-xs font-medium text-gray-700">Hubungan</label>
-								<input type="text" name="anggota_kk_hubungan[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Anak, istri, dll">
-							</div>
-						</div>
-					</div>
-					<button type="button" id="tambah-anggota-kk" class="mt-2 text-sm text-blue-600 hover:text-blue-800">+ Tambah Anggota Keluarga</button>
-				</div>
-				
-				<div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-					<div class="flex">
-						<svg class="flex-shrink-0 w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-						</svg>
-						<div class="ml-3">
-							<h3 class="text-sm font-medium text-yellow-800">Dokumen yang Perlu Disiapkan</h3>
-							<div class="mt-2 text-sm text-yellow-700">
-								<ul class="list-disc pl-5 space-y-1">
-									<li>Fotokopi KTP kepala keluarga</li>
-									<li>Fotokopi KK lama (jika ada)</li>
-									<li>Surat nikah/akta cerai (jika diperlukan)</li>
-									<li>Surat keterangan pindah (jika karena pindah domisili)</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			`;
-			dynamicFields.innerHTML = html;
-
-			// Add functionality to add more family members
-			document.getElementById('tambah-anggota-kk').addEventListener('click', function () {
-				const anggotaList = document.getElementById('anggota-kk-list');
-				const newAnggota = document.createElement('div');
-				newAnggota.className = 'grid grid-cols-1 md:grid-cols-3 gap-4 mb-2';
-				newAnggota.innerHTML = `
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Nama Lengkap</label>
-						<input type="text" name="anggota_kk_nama[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">NIK</label>
-						<input type="text" name="anggota_kk_nik[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-					</div>
-					<div>
-						<label class="block mb-1 text-xs font-medium text-gray-700">Hubungan</label>
-						<input type="text" name="anggota_kk_hubungan[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Anak, istri, dll">
-					</div>
-				`;
-				anggotaList.appendChild(newAnggota);
-			});
-		}
-
-		function addPengantarKTPFields() {
+		function addKeteranganUmumFields() {
 			const html = `
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 					<div>
 						<label class="block mb-2 text-sm font-medium text-gray-900">Tempat, Tanggal Lahir</label>
-						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Jakarta, 17 Agustus 1945">
+						<input type="text" name="ttl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Tegal, 25 April 2003">
 					</div>
 					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat Lengkap</label>
-						<textarea name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2"></textarea>
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block mb-2 text-sm font-medium text-gray-900">Alasan Pengajuan</label>
-						<select name="alasan_pengajuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-							<option value="Baru">Baru (Pertama kali)</option>
-							<option value="Hilang">Hilang</option>
-							<option value="Rusak">Rusak</option>
-							<option value="Ganti Status">Ganti Status (Menikah/Cerai)</option>
-							<option value="Perubahan Data">Perubahan Data</option>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Jenis Kelamin</label>
+						<select name="jenis_kelamin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+							<option value="Laki-Laki">Laki-Laki</option>
+							<option value="Perempuan">Perempuan</option>
 						</select>
 					</div>
-					<div id="ktp-lama-field" style="display: none;">
-						<label class="block mb-2 text-sm font-medium text-gray-900">Nomor KTP Lama</label>
-						<input type="text" name="no_ktp_lama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan</label>
+						<input type="text" name="pekerjaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Contoh: Mahasiswa, Wiraswasta, dst.">
 					</div>
-				</div>
-				<div class="mb-4">
-					<label class="block mb-2 text-sm font-medium text-gray-900">Status Pernikahan</label>
-					<select name="status_pernikahan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-						<option value="Belum Menikah">Belum Menikah</option>
-						<option value="Menikah">Menikah</option>
-						<option value="Cerai Hidup">Cerai Hidup</option>
-						<option value="Cerai Mati">Cerai Mati</option>
-					</select>
-				</div>
-				
-				<div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-					<div class="flex">
-						<svg class="flex-shrink-0 w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-						</svg>
-						<div class="ml-3">
-							<h3 class="text-sm font-medium text-yellow-800">Dokumen yang Perlu Disiapkan</h3>
-							<div class="mt-2 text-sm text-yellow-700">
-								<ul class="list-disc pl-5 space-y-1">
-									<li>Fotokopi KK</li>
-									<li>Surat pengantar RT/RW</li>
-									<li>Fotokopi akta kelahiran</li>
-									<li>Surat nikah/cerai (jika karena perubahan status)</li>
-									<li>Surat keterangan kehilangan dari kepolisian (jika KTP hilang)</li>
-								</ul>
-							</div>
-						</div>
+					<div>
+						<label class="block mb-2 text-sm font-medium text-gray-900">Alamat</label>
+						<textarea name="alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="2" placeholder="Alamat lengkap sesuai KTP"></textarea>
 					</div>
 				</div>
 			`;
 			dynamicFields.innerHTML = html;
-
-			// Show/hide KTP lama field based on reason
-			document.querySelector('select[name="alasan_pengajuan"]').addEventListener('change', function () {
-				const ktpLamaField = document.getElementById('ktp-lama-field');
-				if (this.value === 'Hilang' || this.value === 'Rusak' || this.value === 'Ganti Status' || this.value === 'Perubahan Data') {
-					ktpLamaField.style.display = 'block';
-				} else {
-					ktpLamaField.style.display = 'none';
-				}
-			});
 		}
 	});
 
@@ -845,7 +586,6 @@
 	nikInput.addEventListener('input', () => {
 		const value = nikInput.value;
 
-		// Hanya izinkan angka
 		nikInput.value = value.replace(/\D/g, '');
 
 		if (value.length !== 16) {
@@ -856,30 +596,29 @@
 	});
 </script>
 
-<!-- Load SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?php if ($this->session->flashdata('validation_errors')): ?>
-	<script>
-		Swal.fire({
-			icon: 'error',
-			title: 'Validasi Gagal',
-			html: `<ul style="text-align: left; padding-left: 20px; margin: 0;">
+		<script>
+			Swal.fire({
+				icon: 'error',
+				title: 'Validasi Gagal',
+				html: `<ul style="text-align: left; padding-left: 20px; margin: 0;">
 				<?= str_replace(['<p>', '</p>'], ['<li>', '</li>'], $this->session->flashdata('validation_errors')); ?>
 			</ul>`,
-			confirmButtonText: 'Perbaiki'
-		});
-	</script>
+				confirmButtonText: 'Perbaiki'
+			});
+		</script>
 <?php endif; ?>
 
 <?php if ($this->session->flashdata('success')): ?>
-	<script>
-		Swal.fire({
-			icon: 'success',
-			title: 'Berhasil',
-			text: '<?= $this->session->flashdata('success'); ?>',
-			timer: 3000,
-			showConfirmButton: false
-		});
-	</script>
+		<script>
+			Swal.fire({
+				icon: 'success',
+				title: 'Berhasil',
+				text: '<?= $this->session->flashdata('success'); ?>',
+				timer: 3000,
+				showConfirmButton: false
+			});
+		</script>
 <?php endif; ?>

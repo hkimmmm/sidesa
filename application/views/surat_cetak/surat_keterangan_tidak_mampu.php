@@ -2,234 +2,291 @@
 <html lang="id">
 
 <head>
-	<meta charset="UTF-8">
-	<title><?= htmlspecialchars($title ?? 'Surat Keterangan Tidak Mampu') ?></title>
-	<style>
-		@page {
-			size: A4;
-			margin: 1.5cm;
-		}
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($title ?? 'Surat Keterangan Tidak Mampu') ?></title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
 
-		body {
-			font-family: 'Times New Roman', Times, serif;
-			font-size: 11.5pt;
-			line-height: 1.4;
-			margin: 0;
-			padding: 0;
-		}
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 10pt;
+            line-height: 1.3;
+            margin: 0;
+            padding: 0;
+        }
 
-		.header {
-			position: relative;
-			margin-bottom: 10px;
-		}
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
 
-		.logo {
-			position: absolute;
-			left: 0;
-			top: 0;
-			width: 70px;
-			height: 70px;
-		}
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 8px;
+            object-fit: contain;
+        }
 
-		.header-content {
-			margin-left: 80px;
-			text-align: center;
-		}
+        .header-text {
+            flex-grow: 1;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 11pt;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-		.title {
-			font-size: 11pt;
-			margin: 0;
-			line-height: 1.3;
-		}
+        /* Content Styles */
+        .content {
+            margin: 0 auto;
+            max-width: 100%;
+        }
 
-		hr {
-			border: 1px solid #000;
-			margin: 10px 0;
-		}
+        hr {
+            border: none;
+            border-top: 1.5px solid #000;
+            margin: 3px 0 8px;
+        }
 
-		.content {
-			font-size: 11.5pt;
-		}
+        h3 {
+            text-align: center;
+            text-decoration: underline;
+            margin: 8px 0;
+            font-size: 12pt;
+        }
 
-		h3 {
-			text-align: center;
-			text-decoration: underline;
-			margin: 12px 0 6px 0;
-			font-size: 12pt;
-			font-weight: bold;
-		}
+        .nomor {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 10.5pt;
+        }
 
-		.nomor {
-			text-align: center;
-			margin: 5px 0 15px 0;
-			font-weight: bold;
-		}
+        p {
+            text-align: justify;
+            margin: 6px 0;
+        }
 
-		table {
-			margin: 5px 0 10px 40px;
-			border-collapse: collapse;
-			width: auto;
-		}
+        .indent {
+            text-indent: 30px;
+        }
 
-		table tr td {
-			padding: 2px 0;
-			vertical-align: top;
-		}
+        /* Table Styles */
+        .data-table {
+            margin: 8px 0 8px 30px;
+            border-collapse: collapse;
+            width: calc(100% - 30px);
+            font-size: 10pt;
+        }
 
-		table tr td:first-child {
-			padding-right: 12px;
-			white-space: nowrap;
-		}
+        .data-table td {
+            padding: 1px 3px;
+            vertical-align: top;
+        }
 
-		p {
-			margin: 8px 0;
-			text-align: justify;
-			text-indent: 40px;
-		}
+        .data-table td:first-child {
+            width: 150px;
+        }
 
-		p.no-indent {
-			text-indent: 0;
-		}
+        /* Signature Section */
+        .signature-section {
+            margin-top: 20px;
+        }
 
-		.nip {
-			margin-top: 5px;
-			line-height: 1.2;
-		}
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
 
-		.nip-text {
-			font-size: 11pt;
-			margin-top: 2px;
-		}
+        .signature-col {
+            width: 48%;
+        }
 
+        .signature-col.left {
+            text-align: left;
+        }
 
-		.signature {
-			float: right;
-			text-align: center;
-			margin-top: 30px;
-			width: 45%;
-		}
+        .signature-col.right {
+            text-align: right;
+        }
 
-		.signature img,
-		.ttd-img {
-			display: block;
-			margin: 0 auto 5px auto;
-			height: 70px;
-		}
+        .signature-camat {
+            text-align: center;
+            margin-top: 15px;
+            width: 100%;
+        }
 
-		.text-center {
-			text-align: center;
-		}
+        .signature-space {
+            height: 50px;
+            margin: 3px 0;
+        }
 
-		.clear {
-			clear: both;
-		}
+        .signature-name {
+            font-weight: bold;
+            text-decoration: underline;
+            margin-top: 3px;
+            font-size: 10pt;
+        }
 
-		.bold {
-			font-weight: bold;
-		}
+        .nip {
+            font-size: 9pt;
+            margin-top: 0;
+        }
 
-		.italic {
-			font-style: italic;
-		}
+        .date {
+            float: right;
+            margin: 15px 40px 0 0;
+            font-size: 10pt;
+        }
 
-		.signature p strong {
-			display: block;
-			margin-top: 5px;
-		}
-	</style>
+        .clear {
+            clear: both;
+        }
 
+        .text-center {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <img src="<?= base_url('assets/images/logo/kabupaten_tegal.png') ?>" class="logo"
+                alt="Logo Kabupaten Tegal">
+            <div class="header-text">
+                <strong>PEMERINTAH KABUPATEN TEGAL<br>KECAMATAN SLAWI<br>KELURAHAN PROCOT</strong><br>
+                <small>Alamat: Jl. Nangka, No. 10 Telp. (0283) 492 246 Tegal 52412</small>
+            </div>
+        </div>
 
-	<div class="header">
-		<img src="<?php echo base_url('assets/images/logo/kabupaten_tegal.png'); ?>" class="logo"
-			alt="Logo Kabupaten Tegal">
-		<div class="header-content">
-			<div class="title">
-				<strong>PEMERINTAH KABUPATEN TEGAL<br>
-					KECAMATAN SLAWI<br>
-					KELURAHAN PROCOT</strong><br>
-				Alamat: Jl. Nangka, No. 10 Telp. (0283) 492 246 Tegal 52412
-			</div>
-		</div>
-	</div>
+        <hr>
 
-	<hr>
+        <!-- Title -->
+        <h3>SURAT KETERANGAN TIDAK MAMPU</h3>
+        <div class="nomor">Nomor: <?= htmlspecialchars($pengajuan['no_pengajuan'] ?? '-') ?></div>
 
-	<div class="content">
-		<h3>SURAT KETERANGAN TIDAK MAMPU</h3>
-		<div class="nomor">Nomor : <?= htmlspecialchars($item['no_pengajuan'] ?? '-') ?></div>
+        <!-- Content -->
+        <p class="indent">Yang bertanda tangan di bawah ini Lurah Procot Kecamatan Slawi Kabupaten Tegal, dengan ini
+            menerangkan dengan sesungguhnya bahwa:</p>
 
-		<p class="no-indent">Lurah Procot Kecamatan Slawi Atas dengan ini menerangkan bahwa:</p>
+        <table class="data-table">
+            <tr>
+                <td>Nama Orang Tua/Wali</td>
+                <td>: <?= htmlspecialchars($pengajuan['nama_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>NIK</td>
+                <td>: <?= htmlspecialchars($pengajuan['nik_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Tempat / Tanggal Lahir</td>
+                <td>: <?= htmlspecialchars($pengajuan['ttl_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Jenis Kelamin</td>
+                <td>: <?= htmlspecialchars($pengajuan['jenis_kelamin_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Pekerjaan</td>
+                <td>: <?= htmlspecialchars($pengajuan['pekerjaan_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Agama</td>
+                <td>: <?= htmlspecialchars($pengajuan['agama_ortu'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Alamat</td>
+                <td>: <?= nl2br(htmlspecialchars($pengajuan['alamat_ortu'] ?? '')) ?></td>
+            </tr>
+        </table>
 
-		<table>
-			<tr>
-				<td>Nama</td>
-				<td>: <?= htmlspecialchars($item['nama'] ?? '') ?></td>
-			</tr>
-			<tr>
-				<td>NIK</td>
-				<td>: <?= htmlspecialchars($item['nik'] ?? '') ?></td>
-			</tr>
-			<tr>
-				<td>Tempat / Tanggal Lahir</td>
-				<td>: <?= htmlspecialchars($item['ttl'] ?? '') ?></td>
-			</tr>
-			<tr>
-				<td>Pekerjaan</td>
-				<td>: <?= htmlspecialchars($item['pekerjaan'] ?? '') ?></td>
-			</tr>
-			<tr>
-				<td>Alamat</td>
-				<td>: <?= nl2br(htmlspecialchars($item['alamat'] ?? '')) ?></td>
-			</tr>
-		</table>
+        <p class="indent">Berdasarkan surat pengantar dari RT <?= htmlspecialchars($pengajuan['rt'] ?? '') ?> RW
+            <?= htmlspecialchars($pengajuan['rw'] ?? '') ?> Nomor
+            <?= htmlspecialchars($pengajuan['nomor_pengantar'] ?? '') ?> tanggal
+            <?= isset($pengajuan['tanggal_pengantar']) ? date('d-m-Y', strtotime($pengajuan['tanggal_pengantar'])) : '' ?>,
+            bahwa yang bersangkutan berasal dari <u>Keluarga Tidak Mampu</u> dengan penghasilan rata-rata Rp
+            <?= isset($pengajuan['penghasilan_perbulan']) ? number_format($pengajuan['penghasilan_perbulan'], 0, ',', '.') : '' ?>
+            dan tanggungan <?= htmlspecialchars($pengajuan['jumlah_tanggungan'] ?? '') ?> orang.</p>
 
-		<p>Berdasarkan surat pengantar dari RT <?= htmlspecialchars($rt_rw ?? '') ?> Reg. no :
-			<?= htmlspecialchars($reg_no ?? '') ?> Tanggal <?= htmlspecialchars($tgl_pengantar ?? '') ?>, bahwa benar
-			Yang Bersangkutan Keluarga Tidak Mampu.
-		</p>
+        <p class="indent">Surat ini dibuat sebagai persyaratan
+            <b><?= htmlspecialchars($pengajuan['keperluan'] ?? 'beasiswa KIP Kuliah') ?></b> atas nama:</p>
 
-		<p>Surat Keterangan ini untuk persyaratan <?= htmlspecialchars($keperluan ?? '') ?> atas nama :</p>
+        <table class="data-table">
+            <tr>
+                <td>Nama</td>
+                <td>: <?= htmlspecialchars($pengajuan['nama_anak'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>NIK</td>
+                <td>: <?= htmlspecialchars($pengajuan['nik_anak'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Tempat / Tanggal Lahir</td>
+                <td>: <?= htmlspecialchars($pengajuan['ttl_anak'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Jenis Kelamin</td>
+                <td>: <?= htmlspecialchars($pengajuan['jenis_kelamin_anak'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Agama</td>
+                <td>: <?= htmlspecialchars($pengajuan['agama_anak'] ?? '') ?></td>
+            </tr>
+            <tr>
+                <td>Alamat</td>
+                <td>: <?= nl2br(htmlspecialchars($pengajuan['alamat_anak'] ?? '')) ?></td>
+            </tr>
+        </table>
 
-		<table>
-			<tr>
-				<td>Nama</td>
-				<td>: <?= htmlspecialchars($item['nama'] ?? '') ?></td>
-			</tr>
-			<tr>
-				<td>Tempat / Tanggal Lahir</td>
-				<td>: <?= htmlspecialchars($item['ttl'] ?? '') ?></td>
-			</tr>
-		</table>
+        <p>Demikian surat ini dibuat untuk digunakan seperlunya.</p>
 
-		<p>Surat Keterangan dinyatakan tidak berlaku apabila terjadi pelanggaran, peraturan Perundang-undangan dan Perda
-			Kabupaten Tegal serta apabila terdapat kekeliruan/kesalahan dalam pembuatannya, pemohon/pemegang bersedia
-			mempertanggung jawabkan secara hukum tanpa melibatkan pihak manapun.</p>
+        <div class="date">
+            Procot, <?= date('d F Y') ?>
+        </div>
 
-		<p class="italic bold">Surat keterangan ini berlaku untuk satu kali keperluan.</p>
+        <div class="clear"></div>
 
-		<p class="no-indent">Demikian surat keterangan ini kami buat, untuk dipergunakan sebagaimana mestinya.</p>
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <!-- Puskesos and Lurah -->
+            <div class="signature-row">
+                <div class="signature-col left">
+                    <p class="text-center">Puskesos Kec. Slawi</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name text-center">
+                        <?= htmlspecialchars($pengajuan['nama_puskesos'] ?? '........................') ?></p>
+                    <p class="nip text-center">NIP: <?= htmlspecialchars($pengajuan['nip_puskesos'] ?? '-') ?></p>
+                </div>
 
-		<div class="signature">
-			<p class="text-center"><?= htmlspecialchars($tempat_tanggal ?? 'Tegal, 11 November 2019') ?></p>
-			<p class="text-center">Lurah Mawar Mekar</p>
+                <div class="signature-col right">
+                    <p class="text-center">Lurah Procot</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name text-center">
+                        <?= htmlspecialchars($pengajuan['nama_pejabat'] ?? 'AGUS NUGROHO AP., S.STP') ?></p>
+                    <p class="nip text-center">NIP:
+                        <?= htmlspecialchars($pengajuan['nip_pejabat'] ?? '19830805 201010 1 001') ?></p>
+                </div>
+            </div>
 
-			<?php if ($status === 'disetujui' || $status === 'selesai'): ?>
-				<div class="text-center">
-					<img src="<?= base_url('assets/images/ttd.png') ?>" alt="Tanda Tangan" class="ttd-img">
-				</div>
-			<?php endif; ?>
-
-			<div class="text-center nip">
-				<strong><u><?= htmlspecialchars($nama_pejabat ?? 'UKA SUKARYA, S.Ap., M.Si') ?></u></strong>
-				<div class="nip-text">NIP: <?= htmlspecialchars($nip_pejabat ?? '23456789 300502 1 002') ?></div>
-			</div>
-		</div>
-		<div class="clear"></div>
-	</div>
-
+            <!-- Camat -->
+            <div class="signature-camat">
+                <p>Mengetahui,</p>
+                <p>Camat Slawi</p>
+                <div class="signature-space"></div>
+                <p class="signature-name"><?= htmlspecialchars($pengajuan['nama_camat'] ?? '..................') ?></p>
+                <p class="nip">NIP: <?= htmlspecialchars($pengajuan['nip_camat'] ?? '-') ?></p>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

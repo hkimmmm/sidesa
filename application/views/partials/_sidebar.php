@@ -6,10 +6,8 @@
 		<p class="text-xs text-green-200">Sistem Informasi Desa</p>
 	</div>
 
-	<!-- Menu Navigasi (Scrollable Content) -->
 	<nav class="p-4 overflow-y-auto flex-grow">
 		<ul class="space-y-2">
-			<!-- Dashboard -->
 			<li>
 				<a href="<?php echo base_url('admin'); ?>"
 					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
@@ -22,8 +20,18 @@
 			</li>
 
 			<li>
-				<a href="<?= base_url('admin/banner'); ?>"
-					class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
+				<a href="<?= base_url('user'); ?>" class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
+					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M10 3a3 3 0 100 6 3 3 0 000-6zm-7 13a7 7 0 0114 0H3z"
+							clip-rule="evenodd" />
+					</svg>
+					<span class="ml-3">Users</span>
+				</a>
+			</li>
+
+
+			<li>
+				<a href="<?= base_url('banner'); ?>" class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
 					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 						<path
 							d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm1 3a1 1 0 110 2 1 1 0 010-2zm3 4l2 2 3-3 4 5H5l3-4z" />
@@ -45,7 +53,6 @@
 				</a>
 			</li>
 
-			<!-- Menu Penduduk -->
 			<li>
 				<button type="button" class="flex items-center w-full p-2 rounded-lg hover:bg-green-600 group"
 					aria-controls="dropdown-penduduk" data-collapse-toggle="dropdown-penduduk">
@@ -73,11 +80,13 @@
 							Individu</a>
 					</li>
 					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Mutasi
+						<a href="<?= base_url('admin/data_mutasi'); ?>"
+							class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Mutasi
 							Penduduk</a>
 					</li>
 					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Statistik
+						<a href="<?= base_url('admin/statistik_penduduk') ?>"
+							class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Statistik
 							Penduduk</a>
 					</li>
 				</ul>
@@ -109,13 +118,6 @@
 						<a href="<?php echo base_url('pengajuan/admin'); ?>"
 							class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Pengajuan
 							Masyarakat</a>
-					</li>
-					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">Jadwal
-							Layanan</a>
-					</li>
-					<li>
-						<a href="#" class="flex items-center p-2 text-sm rounded-lg hover:bg-green-600">FAQ</a>
 					</li>
 				</ul>
 			</li>
@@ -156,7 +158,6 @@
 				</a>
 			</li>
 
-			<!-- Menu Pengaturan -->
 			<li>
 				<a href="#" class="flex items-center p-2 rounded-lg hover:bg-green-600 group">
 					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -170,13 +171,11 @@
 		</ul>
 	</nav>
 
-	<!-- Footer Sidebar (Fixed di bawah) -->
 	<div class="p-4 border-t border-green-600 flex-shrink-0">
 		<div class="flex items-center">
-			<img class="w-8 h-8 rounded-full" src="https://via.placeholder.com/40" alt="User photo">
 			<div class="ml-3">
-				<p class="text-sm font-medium">Admin Desa</p>
-				<p class="text-xs text-green-200">Super Admin</p>
+				<p class="text-sm font-medium"><?= $this->session->userdata('nama') ?? 'Pengguna' ?></p>
+				<p class="text-xs text-green-200"><?= ucfirst($this->session->userdata('role') ?? '-') ?></p>
 			</div>
 		</div>
 		<a href="<?= base_url('auth/logout') ?>"
@@ -191,7 +190,6 @@
 	</div>
 </aside>
 
-<!-- Script untuk dropdown -->
 <script>
 	document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
 		button.addEventListener('click', () => {
@@ -199,7 +197,6 @@
 			const target = document.getElementById(targetId);
 			target.classList.toggle('hidden');
 
-			// Rotate arrow icon
 			const arrow = button.querySelector('svg:last-child');
 			arrow.classList.toggle('rotate-180');
 		});

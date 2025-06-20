@@ -27,13 +27,22 @@
 </style>
 
 <body class="h-screen flex bg-gray-50">
-	<?php $this->load->view('partials/_users_sidebar'); ?>
-	<div id="content-wrapper" class="content-wrapper flex-1 flex flex-col overflow-hidden">
-		<main class="flex-1 overflow-y-auto p-6 md:p-10">
-			<?php $this->load->view('pages/users/pengajuan/detail'); ?>
-		</main>
-	</div>
-	<?php $this->load->view('partials/_scripts'); ?>
+    <?php 
+        $role = $this->session->userdata('role');
+
+        if ($role === 'admin') {
+            $this->load->view('partials/_sidebar');
+        } else {
+            $this->load->view('partials/_users_sidebar');
+        }
+    ?>
+    <div id="content-wrapper" class="content-wrapper flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 overflow-y-auto p-6 md:p-10">
+            <?php $this->load->view('pages/users/pengajuan/detail'); ?>
+        </main>
+    </div>
+    <?php $this->load->view('partials/_scripts'); ?>
 </body>
+
 
 </html>

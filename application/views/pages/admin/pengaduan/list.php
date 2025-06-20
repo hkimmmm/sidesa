@@ -95,44 +95,22 @@
 							<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
 						</tr>
 					</thead>
-					<tbody class="bg-white divide-y divide-gray-200">
-						<?php foreach ($pengaduan as $item): ?>
-							<tr>
-								<td class="px-6 py-4 text-sm text-gray-900"><?= $item['kode_pengaduan'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['jenis_pengaduan'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['user_id'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['prioritas'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['judul'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['deskripsi'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['lokasi'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['tanggal_kejadian'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500">
-									<?= date('d M Y', strtotime($item['tanggal_pengaduan'])) ?>
-								</td>
-								<td class="px-6 py-4 text-sm">
-									<?php
-									$status_class = [
-										'proses' => 'bg-blue-100 text-blue-800',
-										'diterima' => 'bg-green-100 text-green-800',
-										'ditolak' => 'bg-red-100 text-red-800',
-										'selesai' => 'bg-purple-100 text-purple-800'
-									];
-									?>
-									<span
-										class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $status_class[$item['status']] ?>">
-										<?= ucfirst($item['status']) ?>
-									</span>
-								</td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['alasan_ditolak'] ?></td>
-								<td class="px-6 py-4 text-sm text-gray-500"><?= $item['email_pelapor'] ?></td>
-								<td class="px-6 py-4 text-sm text-right">
-									<a href="<?= site_url('pengaduan/detail/' . $item['id']) ?>"
-										class="text-blue-600 hover:text-blue-900">Detail</a>
-								</td>
-							</tr>
-						<?php endforeach; ?>
+					<tbody class="bg-white divide-y divide-gray-200" id="pengaduanTable">
+						<!-- Data dari JavaScript -->
 					</tbody>
 				</table>
+				<div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+					<button id="prevPage"
+						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+						Sebelumnya
+					</button>
+					<span class="text-sm text-gray-700" id="pageInfo">Halaman 1 dari 1</span>
+					<button id="nextPage"
+						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+						Selanjutnya
+					</button>
+				</div>
+
 			</div>
 		</div>
 	<?php endif; ?>
@@ -143,14 +121,114 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-	document.addEventListener('DOMContentLoaded', function () {
-		flatpickr('#tanggal', {
-			mode: 'range',
-			dateFormat: 'Y-m-d',
-			altInput: true,
-			altFormat: 'F j, Y',
-			allowInput: false
+	let currentPage = 1;
+	const perPage = 10;
+	let totalPengaduan = 0;
+
+	document.addEventListener('DOMContentLoaded', () => {
+		fetchPengaduan();
+
+		document.getElementById("prevPage").addEventListener("click", () => {
+			if (currentPage > 1) {
+				currentPage--;
+				fetchPengaduan();
+			}
+		});
+
+		document.getElementById("nextPage").addEventListener("click", () => {
+			if (currentPage < Math.ceil(totalPengaduan / perPage)) {
+				currentPage++;
+				fetchPengaduan();
+			}
 		});
 	});
 
+	function fetchPengaduan() {
+		let status = document.getElementById('status')?.value || '';
+		let prioritas = document.getElementById('prioritas')?.value || '';
+		let tanggal = document.getElementById('tanggal')?.value || '';
+		let search = document.getElementById('search')?.value || '';
+
+		const params = new URLSearchParams({
+			page: currentPage,
+			per_page: perPage,
+			status,
+			prioritas,
+			tanggal,
+			search
+		});
+
+		fetch(`<?= base_url('pengaduan/get_all') ?>?${params.toString()}`, {
+			method: 'GET',
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		})
+			.then(res => res.json())
+			.then(data => {
+				totalPengaduan = data.total;
+				renderPengaduanTable(data.pengaduan);
+				updatePengaduanPagination();
+			})
+			.catch(err => console.error('Error saat fetch:', err));
+
+	}
+
+	function renderPengaduanTable(data) {
+		const tbody = document.getElementById("pengaduanTable");
+		tbody.innerHTML = "";
+
+		if (!data.length) {
+			tbody.innerHTML = `<tr><td colspan="13" class="text-center text-gray-500 py-4">Tidak ada data</td></tr>`;
+			return;
+		}
+
+		data.forEach((item, index) => {
+			const row = document.createElement("tr");
+			row.innerHTML = `
+				<td class="px-6 py-4 text-sm text-gray-900">${item.kode_pengaduan}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.jenis_pengaduan}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.user_id}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.prioritas}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.judul}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.deskripsi}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.lokasi}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.tanggal_kejadian}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${formatDate(item.tanggal_pengaduan)}</td>
+				<td class="px-6 py-4 text-sm">
+					<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass(item.status)}">
+						${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+					</span>
+				</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.alasan_ditolak ?? ''}</td>
+				<td class="px-6 py-4 text-sm text-gray-500">${item.email_pelapor}</td>
+				<td class="px-6 py-4 text-sm text-right">
+					<a href="<?= site_url('pengaduan/detail/') ?>${item.id}" class="text-blue-600 hover:text-blue-900">Detail</a>
+				</td>
+			`;
+			tbody.appendChild(row);
+		});
+	}
+
+	function updatePengaduanPagination() {
+		const totalPages = Math.ceil(totalPengaduan / perPage);
+		document.getElementById('pageInfo').textContent = `Halaman ${currentPage} dari ${totalPages}`;
+		document.getElementById('prevPage').disabled = currentPage === 1;
+		document.getElementById('nextPage').disabled = currentPage === totalPages;
+	}
+
+	function statusClass(status) {
+		switch (status) {
+			case 'proses': return 'bg-blue-100 text-blue-800';
+			case 'diterima': return 'bg-green-100 text-green-800';
+			case 'ditolak': return 'bg-red-100 text-red-800';
+			case 'selesai': return 'bg-purple-100 text-purple-800';
+			default: return 'bg-gray-100 text-gray-800';
+		}
+	}
+
+	function formatDate(dateString) {
+		const date = new Date(dateString);
+		return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+	}
 </script>

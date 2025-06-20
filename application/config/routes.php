@@ -51,5 +51,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $route['default_controller'] = 'welcome';
 $route['news/view/(:any)'] = 'news/detail/$1';
+$route['banner'] = 'banner/index'; // Untuk tampilan utama
+$route['banner/get_all'] = 'banner/get_all'; // Untuk endpoint AJAX
+$route['user/get_all'] = 'user/get_all';
+$route['user'] = 'user/index';
+$route['banner/store'] = 'banner/store'; // Untuk create
+$route['banner/get_active'] = 'banner/get_active';
+$route['api/banners'] = 'welcome/get_banners';
+$route['banner/get/(:num)'] = 'banner/get/$1'; // Untuk edit
+$route['banner/update/(:num)'] = 'banner/update/$1'; // Untuk update
+$route['banner/delete/(:num)'] = 'banner/delete/$1'; // Untuk delete
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

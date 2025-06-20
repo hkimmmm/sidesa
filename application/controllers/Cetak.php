@@ -7,58 +7,29 @@ class Cetak extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('pdfgenerator');
+		$this->load->model('Pengajuan_model');
 	}
 
 	public function cetak_surat()
 	{
-		$jenis_surat = $this->input->post('jenis_surat', true);
-		$nama = $this->input->post('nama', true);
-		$nik = $this->input->post('nik', true);
-		$no_pengajuan = $this->input->post('no_pengajuan', true);
-		$ttl = $this->input->post('ttl', true);
-		$alamat = $this->input->post('alamat', true);
-		$pekerjaan = $this->input->post('pekerjaan', true);
-		$nama_orangtua = $this->input->post('nama_orangtua', true);
-		$status = $this->input->post('status', true);
+		$pengajuan_id = $this->input->post('pengajuan_id');
 
-		$daftar_surat = [
-			'Surat Keterangan Tidak Mampu' => 'Surat Keterangan Tidak Mampu',
-			'Surat Keterangan Pindah Domisili' => 'Surat Keterangan Pindah Domisili',
-			'Surat Kematian' => 'Surat Kematian',
-			'Surat Slip Gaji Orang Tua' => 'Surat Slip Gaji Orang Tua',
-			'Surat Pengantar Nikah' => 'Surat Pengantar Nikah',
-			'Surat Talak, Cerai, Rujuk' => 'Surat Talak, Cerai, Rujuk',
-			'Surat Pengantar Pembuatan KK Baru' => 'Surat Pengantar Pembuatan KK Baru',
-			'Surat Pengantar KTP' => 'Surat Pengantar KTP',
-		];
+		$pengajuan = $this->Pengajuan_model->get_by_id($pengajuan_id);
 
-		if (!isset($daftar_surat[$jenis_surat])) {
+		if (!$pengajuan) {
 			show_404();
 			return;
 		}
 
-		$title = $daftar_surat[$jenis_surat];
-		$view = 'surat_cetak/' . strtolower(str_replace(' ', '_', $jenis_surat));
-
-		$item = [
-			'nama' => $nama,
-			'nik' => $nik,
-			'no_pengajuan' => $no_pengajuan,
-			'ttl' => $ttl,
-			'alamat' => $alamat,
-			'pekerjaan' => $pekerjaan,
-			'nama_ortu' => $nama_orangtua,
-		];
+		$jenis_surat_slug = strtolower(str_replace(' ', '_', $pengajuan['nama_surat']));
 
 		$data = [
-			'title' => $title,
-			'item' => $item,
-			'status' => $status,
+			'title' => $pengajuan['nama_surat'],
+			'pengajuan' => $pengajuan,
+			'status' => $pengajuan['status']
 		];
 
-		$html = $this->load->view($view, $data, true);
-		$this->pdfgenerator->generate($html, $jenis_surat, 'A4', 'portrait');
+		$html = $this->load->view('surat_cetak/' . $jenis_surat_slug, $data, true);
+		$this->pdfgenerator->generate($html, $pengajuan['nama_surat'], 'A4', 'portrait');
 	}
-
-
 }

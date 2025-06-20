@@ -15,7 +15,7 @@ class Pengajuan extends CI_Controller
 	public function index()
 	{
 		$user_id = $this->session->userdata('user_id');
-		$pengajuan = $this->Pengajuan_model->get_all(null, null, null, null);
+		$pengajuan = $this->Pengajuan_model->get_all(null, null, null, null, null, null, $user_id);
 
 		$data = [
 			'title' => 'Status Pengajuan',
@@ -24,6 +24,50 @@ class Pengajuan extends CI_Controller
 
 		$this->load->view('layouts/pengajuan_list_users', $data);
 	}
+
+	public function get_all()
+	{
+		header('Content-Type: application/json');
+
+		try {
+			$page = (int) ($this->input->get('page') ?? 1);
+			$search = $this->input->get('search');
+			$jenis_surat_id = $this->input->get('jenis_surat_id');
+			$status = $this->input->get('status');
+			$tanggal_awal = $this->input->get('tanggal_awal');
+			$tanggal_akhir = $this->input->get('tanggal_akhir');
+
+			$limit = 5;
+			$offset = ($page - 1) * $limit;
+
+			$tanggal = null;
+			if ($tanggal_awal && $tanggal_akhir) {
+				$tanggal = [$tanggal_awal, $tanggal_akhir];
+			}
+
+			// Ambil data dari model
+			$data = $this->Pengajuan_model->get_all($search, $jenis_surat_id, $tanggal, $status, $limit, $offset);
+			$total = $this->Pengajuan_model->count_all($search, $jenis_surat_id, $tanggal, $status);
+
+			// Buat response JSON
+			echo json_encode([
+				'status' => 'success',
+				'data' => $data,
+				'pagination' => [
+					'current_page' => $page,
+					'per_page' => $limit,
+					'total_records' => $total,
+					'total_pages' => ceil($total / $limit),
+				]
+			]);
+		} catch (Exception $e) {
+			echo json_encode([
+				'status' => 'error',
+				'message' => $e->getMessage()
+			]);
+		}
+	}
+
 
 	public function add()
 	{

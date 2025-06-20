@@ -43,6 +43,36 @@ class Pengaduan_model extends CI_Model
 		$this->db->order_by('tanggal_pengaduan', 'DESC');
 		return $this->db->get()->result_array();
 	}
+
+	public function count_all($start_date = null, $end_date = null, $jenis = null, $status = null, $tanggal = null, $prioritas = null)
+	{
+		$this->db->from('pengaduan');
+
+		if ($start_date && $end_date) {
+			$this->db->where('tanggal_kejadian >=', $start_date);
+			$this->db->where('tanggal_kejadian <=', $end_date);
+		}
+
+		if ($tanggal && $tanggal[0] && $tanggal[1]) {
+			$this->db->where('created_at >=', $tanggal[0] . ' 00:00:00');
+			$this->db->where('created_at <=', $tanggal[1] . ' 23:59:59');
+		}
+
+		if ($prioritas) {
+			$this->db->where('prioritas', $prioritas);
+		}
+
+		if (!empty($jenis)) {
+			$this->db->where('jenis_pengaduan', $jenis);
+		}
+
+		if (!empty($status)) {
+			$this->db->where('status', $status);
+		}
+
+		return $this->db->count_all_results();
+	}
+
 	private function generate_kode_pengaduan()
 	{
 		$prefix = 'PGD-' . date('Y-m') . '-';

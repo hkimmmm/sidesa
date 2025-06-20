@@ -145,7 +145,7 @@
 			dateFormat: 'Y-m-d',
 			altInput: true,
 			altFormat: 'F j, Y',
-			allowInput: false 
+			allowInput: false
 		});
 	});
 

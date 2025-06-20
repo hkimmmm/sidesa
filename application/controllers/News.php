@@ -14,13 +14,67 @@ class News extends CI_Controller
 
 	public function index()
 	{
+		// Get parameters from request
+		$search = $this->input->get('search');
+		$status = $this->input->get('status');
+		$page = $this->input->get('page') ?? 1;
+		$per_page = 10; // Default items per page
+
+		// Calculate offset
+		$offset = ($page - 1) * $per_page;
+
+		// Get data from model
+		$data['title'] = 'Daftar Berita';
+		$data['news'] = $this->News_model->get_all($per_page, $offset, $search, $status);
+		$data['total_news'] = $this->News_model->count_all($search, $status);
+
+		// Pagination config
+		$data['current_page'] = $page;
+		$data['per_page'] = $per_page;
+		$data['total_pages'] = ceil($data['total_news'] / $per_page);
+
+		$this->load->view('layouts/news_list', $data);
+	}
+
+	public function get_all()
+{
+	header('Content-Type: application/json');
+
+	try {
+		// Ambil parameter dari request
+		$page = (int) ($this->input->get('page') ?? 1);
+		$per_page = (int) ($this->input->get('per_page') ?? 5); // BACA dari URL, default 5
 		$search = $this->input->get('search');
 		$status = $this->input->get('status');
 
-		$data['title'] = 'Daftar Berita';
-		$data['news'] = $this->News_model->get_all(null, null, $search, $status);
-		$this->load->view('layouts/news_list', $data);
+		// Hitung offset
+		$offset = ($page - 1) * $per_page;
+
+		// Ambil data dari model
+		$news = $this->News_model->get_all($per_page, $offset, $search, $status);
+		$total = $this->News_model->count_all($search, $status);
+
+		// Kirimkan response JSON
+		$response = [
+			'status' => 'success',
+			'data' => $news,
+			'pagination' => [
+				'total_records' => $total,
+				'current_page' => $page,
+				'per_page' => $per_page,
+				'total_pages' => ceil($total / $per_page)
+			]
+		];
+
+		echo json_encode($response);
+	} catch (Exception $e) {
+		echo json_encode([
+			'status' => 'error',
+			'message' => $e->getMessage()
+		]);
 	}
+}
+
 
 	public function add()
 	{

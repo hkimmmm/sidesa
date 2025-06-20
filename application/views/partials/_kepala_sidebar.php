@@ -53,10 +53,9 @@
 	<!-- Footer Sidebar (Fixed di bawah) -->
 	<div class="p-4 border-t border-green-600 flex-shrink-0">
 		<div class="flex items-center">
-			<img class="w-8 h-8 rounded-full" src="https://via.placeholder.com/40" alt="User photo">
 			<div class="ml-3">
-				<p class="text-sm font-medium">Kepala Desa</p>
-				<p class="text-xs text-green-200">Administrator</p>
+				<p class="text-sm font-medium"><?= $this->session->userdata('nama') ?? 'Pengguna' ?></p>
+				<p class="text-xs text-green-200"><?= ucfirst($this->session->userdata('role') ?? '-') ?></p>
 			</div>
 		</div>
 		<a href="<?php echo base_url('auth/logout'); ?>"

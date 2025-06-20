@@ -8,13 +8,19 @@ class Pengajuan_model extends CI_Model
 		parent::__construct();
 	}
 
-	public function get_all($search = null, $jenis_surat_id = null, $tanggal = null, $status = null, $limit = null, $offset = null)
+	public function get_all($search = null, $jenis_surat_id = null, $tanggal = null, $status = null, $limit = null, $offset = null, $user_id = null)
 	{
-		$this->db->select('p.id AS pengajuan_id, p.no_pengajuan, p.user_id, p.jenis_surat_id, p.keperluan, p.status, p.catatan, p.created_at, p.updated_at, js.nama_surat, js.kode_surat');
+		$this->db->select('p.id AS pengajuan_id, p.no_pengajuan, p.user_id, p.jenis_surat_id, p.keperluan, p.status, p.catatan, p.created_at, p.updated_at, js.nama_surat, js.kode_surat, dp.field_value AS nama_pemohon');
 		$this->db->from('pengajuan p');
 		$this->db->join('jenis_surat js', 'js.id = p.jenis_surat_id');
+		$this->db->join('data_pengajuan dp', 'dp.pengajuan_id = p.id AND dp.field_name = "nama_lengkap"', 'left');
 
-		if ($search) {	
+		// Filter user_id jika diberikan
+		if ($user_id !== null) {
+			$this->db->where('p.user_id', $user_id);
+		}
+
+		if ($search) {
 			$this->db->group_start();
 			$this->db->like('p.no_pengajuan', $search);
 			$this->db->or_like('js.nama_surat', $search);
@@ -26,7 +32,6 @@ class Pengajuan_model extends CI_Model
 			$this->db->where('p.jenis_surat_id', $jenis_surat_id);
 		}
 
-		// Filter tanggal
 		if ($tanggal && $tanggal[0] && $tanggal[1]) {
 			$this->db->where('p.created_at >=', $tanggal[0] . ' 00:00:00');
 			$this->db->where('p.created_at <=', $tanggal[1] . ' 23:59:59');
@@ -42,15 +47,9 @@ class Pengajuan_model extends CI_Model
 			$this->db->limit($limit, $offset);
 		}
 
-		$result = $this->db->get()->result_array();
-
-		// Tambahkan nama pemohon statis
-		foreach ($result as &$item) {
-			$item['nama_pemohon'] = 'masyarakat';
-		}
-
-		return $result;
+		return $this->db->get()->result_array();
 	}
+
 
 	public function count_all($search = null, $jenis_surat_id = null, $tanggal = null, $status = null)
 	{
@@ -84,18 +83,18 @@ class Pengajuan_model extends CI_Model
 	public function get_by_id($id)
 	{
 		$this->db->select('
-        p.id as pengajuan_id,
-        p.no_pengajuan,
-        p.user_id,
-        p.jenis_surat_id,
-        p.keperluan,
-        p.status,
-        p.catatan,
-        p.created_at,
-        p.updated_at,
-        js.nama_surat,
-        js.kode_surat
-    ');
+			p.id as pengajuan_id,
+			p.no_pengajuan,
+			p.user_id,
+			p.jenis_surat_id,
+			p.keperluan,
+			p.status,
+			p.catatan,
+			p.created_at,
+			p.updated_at,
+			js.nama_surat,
+			js.kode_surat
+    	');
 		$this->db->from('pengajuan p');
 		$this->db->join('jenis_surat js', 'js.id = p.jenis_surat_id', 'inner');
 		$this->db->where('p.id', $id);
@@ -105,7 +104,6 @@ class Pengajuan_model extends CI_Model
 			return null;
 		}
 
-		// buat slug sementara dari nama_surat (tanpa simpan di DB)
 		$pengajuan['jenis_surat_slug'] = strtolower(str_replace(' ', '_', $pengajuan['nama_surat']));
 
 		$this->db->select('field_name, field_value');
@@ -138,11 +136,14 @@ class Pengajuan_model extends CI_Model
 	public function insert($data)
 	{
 		$kode_surat = $this->get_jenis_surat_by_id($data['jenis_surat_id'])['kode_surat'];
+
 		$no_pengajuan = $kode_surat . '/' . date('Y') . '/' . date('m') . '/' . sprintf('%03d', $this->get_count_pengajuan_this_month() + 1);
+
+		$user_id = $this->session->userdata('user_id');
 
 		$data_pengajuan = [
 			'no_pengajuan' => $no_pengajuan,
-			'user_id' => 1,
+			'user_id' => $user_id,
 			'jenis_surat_id' => $data['jenis_surat_id'],
 			'keperluan' => $data['keperluan'],
 			'status' => 'pending',
@@ -156,6 +157,7 @@ class Pengajuan_model extends CI_Model
 
 		return $pengajuan_id;
 	}
+
 
 	public function update($id, $data)
 	{
@@ -287,7 +289,6 @@ class Pengajuan_model extends CI_Model
 		$this->db->group_by("status");
 		$result = $this->db->get()->result_array();
 
-		// Format data untuk grafik
 		$labels = [];
 		$data = [];
 		foreach ($result as $row) {

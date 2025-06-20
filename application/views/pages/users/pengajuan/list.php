@@ -1,7 +1,8 @@
 <div class="max-w-4xl mx-auto">
 	<div class="flex justify-between items-center mb-8">
 		<h1 class="text-2xl font-bold text-gray-800">Status Pengajuan</h1>
-		<a href="<?= site_url('pengajuan/add') ?>" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+		<a href="<?= site_url('pengajuan/add') ?>"
+			class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
 			Buat Pengajuan Baru
 		</a>
 	</div>
@@ -9,7 +10,8 @@
 	<?php if (empty($pengajuan)): ?>
 		<div class="bg-white rounded-lg shadow-md p-6 text-center">
 			<p class="text-gray-600">Anda belum memiliki pengajuan</p>
-			<a href="<?= site_url('pengajuan/add') ?>" class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+			<a href="<?= site_url('pengajuan/add') ?>"
+				class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
 				Buat Pengajuan Baru
 			</a>
 		</div>
@@ -61,7 +63,7 @@
 								$bg_color = 'bg-purple-100';
 								$icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
 							}
-						?>
+							?>
 							<div class="flex items-start">
 								<div class="flex-shrink-0">
 									<div class="flex items-center justify-center w-8 h-8 rounded-full <?= $bg_color ?> text-white">
@@ -73,7 +75,8 @@
 								<div class="ml-4">
 									<h3 class="text-lg font-medium text-gray-900"><?= ucfirst($track['status']) ?></h3>
 									<p class="text-gray-600"><?= $track['keterangan'] ?></p>
-									<p class="text-sm text-gray-500 mt-1"><?= date('d F Y, H:i', strtotime($track['created_at'])) ?></p>
+									<p class="text-sm text-gray-500 mt-1"><?= date('d F Y, H:i', strtotime($track['created_at'])) ?>
+									</p>
 								</div>
 							</div>
 						<?php endforeach; ?>
@@ -81,7 +84,8 @@
 				</div>
 
 				<div class="mt-6 flex justify-end">
-					<a href="<?= site_url('pengajuan/detail/' . $item['pengajuan_id']) ?>" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+					<a href="<?= site_url('pengajuan/detail/' . $item['pengajuan_id']) ?>"
+						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
 						Lihat Detail
 					</a>
 				</div>

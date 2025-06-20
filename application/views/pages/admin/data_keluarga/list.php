@@ -2,7 +2,8 @@
 	<div class="flex justify-between items-center mb-8">
 		<h1 class="text-2xl font-bold text-gray-800">Struktur Keluarga</h1>
 		<div class="flex space-x-2">
-			<a href="#" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+			<a href="<?= base_url('admin/add_data_keluarga'); ?>"
+				class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
 				Tambah Anggota Keluarga
 			</a>
 		</div>

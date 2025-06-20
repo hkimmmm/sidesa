@@ -142,12 +142,28 @@ class Admin extends CI_Controller
 		$this->load->view('layouts/datakeluarga', $data);
 	}
 
+	public function add_data_keluarga()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Tambah Data Keluarga';
+
+		$this->load->view('layouts/tambah_data_keluarga', $data);
+	}
+
 	public function data_individu()
 	{
 		$user_id = $this->session->userdata('user_id');
 		$data['title'] = 'Data Individu';
 
 		$this->load->view('layouts/data_individu', $data);
+	}
+
+	public function add_data_individu()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Tambah Data Individu';
+
+		$this->load->view('layouts/tambah_data_individu', $data);
 	}
 	public function data_mutasi()
 	{
@@ -157,12 +173,20 @@ class Admin extends CI_Controller
 		$this->load->view('layouts/data_mutasi', $data);
 	}
 
-	public function banner()
+	public function add_data_mutasi()
 	{
 		$user_id = $this->session->userdata('user_id');
-		$data['title'] = 'Daftar Banner';
+		$data['title'] = 'Tambah Data Mutasi';
 
-		$this->load->view('layouts/banner', $data);
+		$this->load->view('layouts/tambah_data_mutasi', $data);
+	}
+
+	public function add_banner()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$data['title'] = 'Tambah Banner';
+
+		$this->load->view('layouts/tambah_banner', $data);
 	}
 
 	public function statistik_penduduk()
@@ -173,11 +197,4 @@ class Admin extends CI_Controller
 		$this->load->view('layouts/statistik_penduduk', $data);
 	}
 
-	public function add_banner()
-	{
-		$user_id = $this->session->userdata('user_id');
-		$data['title'] = 'Tambah Banner';
-
-		$this->load->view('layouts/tambah_banner', $data);
-	}
 }

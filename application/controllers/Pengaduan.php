@@ -238,6 +238,49 @@ class Pengaduan extends CI_Controller
 		$this->load->view('layouts/pengaduan_list_admin', $data);
 	}
 
+	public function get_all()
+	{
+		// Pastikan hanya menerima request AJAX
+		if (!$this->input->is_ajax_request()) {
+			show_404();
+		}
+
+		$status = $this->input->get('status');
+		$prioritas = $this->input->get('prioritas');
+		$search = $this->input->get('search');
+		$tanggal = $this->input->get('tanggal');
+
+		$pengaduan = $this->Pengaduan_model->get_all(
+			null,           // start_date
+			null,           // end_date
+			$search,        // jenis
+			$status,        // status
+			$tanggal,       // tanggal
+			null,           // limit
+			null,           // offset
+			$prioritas      // prioritas
+		);
+
+
+		$total = $this->Pengaduan_model->count_all(
+			null,           // start_date
+			null,           // end_date
+			$search,        // jenis
+			$status,        // status
+			$tanggal,       // tanggal
+			$prioritas      // prioritas
+		);
+
+
+		// Kembalikan data dalam format JSON
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode([
+				'pengaduan' => $pengaduan,
+				'total' => $total
+			]));
+	}
+
 	public function update_status($id)
 	{
 		$this->form_validation->set_rules('status', 'Status', 'required');
